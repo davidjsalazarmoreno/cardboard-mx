@@ -1,0 +1,30 @@
+{
+  "name": "cardboard-mx",
+  "version": "0.0.1",
+  "description": "Dev Testing CardBoard Mexico",
+  "main": "index.js",
+  "repository": "dd",
+  "author": "David Salazar <davidjsalazarmoreno@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "firebase": "^3.7.0",
+    "getstorybook": "^1.7.0",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "react-firebase": "^2.2.2"
+  },
+  "devDependencies": {
+    "@kadira/storybook": "^2.21.0",
+    "@types/react": "^15.0.14",
+    "css-loader": "^0.26.2",
+    "sass-loader": "^6.0.2",
+    "style-loader": "^0.13.2",
+    "ts-loader": "^2.0.1",
+    "typescript": "^2.2.1",
+    "webpack": "^2.2.1"
+  },
+  "scripts": {
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
+  }
+}

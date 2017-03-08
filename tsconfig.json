@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es5",
+    "jsx": "react",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "noImplicitAny": false,
+    "removeComments": false,
+    "sourceMap": false,
+    "inlineSourceMap": true,
+    "noEmitHelpers": false,
+    "strictNullChecks": false,
+    "lib": [
+      "dom",
+      "es6",
+      "es7",
+      "es2017",
+      "es2015.promise", 
+      "es5"
+    ],
+    "pretty": true
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    ".out",
+    ".storybook",
+    "src/stories"
+  ],
+  "buildOnSave": false,
+  "compileOnSave": false,
+  "awesomeTypescriptLoaderOptions": {}
+}
