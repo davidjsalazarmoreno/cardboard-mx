@@ -4,10 +4,15 @@ import * as React from 'react';
 // Storybook
 import { storiesOf, action, module } from '@kadira/storybook';
 
-storiesOf('Button', module)
-  .add('with text', () => (
-    <button onClick={action('clicked')}>Hello Button</button>
+// Components
+import {VideoPlayerComponent} from '../components/video-player/video-player.component';
+
+
+storiesOf('VideoPlayerComponent', module)
+  .add('default view', () => (
+    <div>
+      <VideoPlayerComponent 
+      url={`https://www.youtube.com/embed/7SWvDHvWXok`}
+      />
+    </div>
   ))
-  .add('with some emoji', () => (
-    <button onClick={action('clicked')}>😀 😎 👍 💯</button>
-  ));
