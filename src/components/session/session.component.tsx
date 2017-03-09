@@ -6,13 +6,13 @@ import {LoadingStateHOC, ILoadingStateHOCOwnProps} from '../hoc/loading-state.ho
 
 // Props
 interface ISessionComponentProps {
-  currentUser: { username: string };
+  username: string;
   onSave: ( username, password ) => Promise<any>;
+  onLogout: () => Promise<any>;
 };
 
 // State
 interface ISessionComponentState {
-  isLogged: boolean;
   username: string;
   password: string;
 };
@@ -20,7 +20,6 @@ interface ISessionComponentState {
 @LoadingStateHOC()
 export class SessionComponent extends React.Component<ISessionComponentProps & ILoadingStateHOCOwnProps, ISessionComponentState> {
   state = {
-    isLogged: false,
     username: '',
     password: ''
   };
@@ -51,20 +50,31 @@ export class SessionComponent extends React.Component<ISessionComponentProps & I
   renderUserCard() {
     return (
       <div>
-        {this.props.currentUser.usernameS}
+        Usuario: {this.props.username}
+        <hr/>
+        <button type="button" onClick={() => {
+          this.props.onLogout();
+        }}>Cerrar sesión</button>
       </div>
     )
   }
 
   render () {
     // Props
-    const { onSave, toggleLoadingState } = this.props;
+    const { loadingText, onSave, toggleLoadingState } = this.props;
 
     // State 
     const { username, password } = this.state;
 
     // Event handlers
     const { handleInputChange } = this;
+
+    // Render events
+    const { renderUserCard } = this;
+
+    if ( this.props.username.length > 0 ) {
+      return renderUserCard();
+    }
 
     return (
       <div className="SessionComponent">
@@ -77,11 +87,6 @@ export class SessionComponent extends React.Component<ISessionComponentProps & I
           onSave( username, password ).then(success => {
             console.log(success);
             toggleLoadingState('');
-
-            this.setState({
-              ...this.state,
-              isLogged: true
-            });
 
           }).catch(error => {
             console.log(error);
@@ -102,6 +107,10 @@ export class SessionComponent extends React.Component<ISessionComponentProps & I
             Contraseña
           </label>
           <input id="password" type="password" onChange={handleInputChange} required />
+
+          <p>
+            {loadingText}
+          </p>
 
           <button type="submit">
             Aceptar

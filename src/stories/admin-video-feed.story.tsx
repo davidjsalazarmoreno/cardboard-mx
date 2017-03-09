@@ -88,8 +88,6 @@ class WrapperFirebase extends React.Component<any,any> {
 
   componentDidMount () {
     remoteVideosRef.once('value').then((snapshot) => {
-      console.log(snapshot.val());
-
       const remoteVideos = snapshot.val().videos;
 
       this.setState({ ...this.state, videos: remoteVideos })
@@ -102,28 +100,27 @@ class WrapperFirebase extends React.Component<any,any> {
         <AdminVideoFeedComponent
           videos={this.state.videos}
           onVideoSave={video => {
-          const videosWithTheNew = [ ...this.state.videos, video ];
+            const videosWithTheNew = [ ...this.state.videos, video ];
+            return new Promise((resolve, reject) => {
+              console.log(videos);
 
-          return new Promise((resolve, reject) => {
-            console.log(videos);
+              remoteVideosRef.set({
+                'videos': videosWithTheNew
+              }).then((...args) => {
+                console.log(args);
+                this.setState({
+                  ...this.state,
+                  videos: videosWithTheNew
+                })
+                resolve(true);
 
-            remoteVideosRef.set({
-              'videos': videosWithTheNew
-            }).then((...args) => {
-              console.log(args);
-              this.setState({
-                ...this.state,
-                videos: videosWithTheNew
-              })
-              resolve(true);
+              }).catch(error => {
+                console.log(error);
+                resolve(false);
+              });
 
-            }).catch(error => {
-              console.log(error);
-              resolve(false);
             });
-
-          });
-        }}
+          }}
         />
       </div>
     );

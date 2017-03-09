@@ -112,7 +112,7 @@ export class PublicVideoFeedComponent extends React.Component<IPublicVideoFeedCo
 
             return (
               <div 
-                key={url}
+                key={`${url}-${index}`}
                 onClick={() => {
                   const newState = ({
                     ...this.state,

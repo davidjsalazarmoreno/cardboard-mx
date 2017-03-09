@@ -16,21 +16,9 @@ interface IAdminVideoFeedComponentProps extends IPublicVideoFeedComponentProps {
 };
 
 // State
-interface IAdminVideoFeedComponentState {
-  isAggregatorVisible: boolean;
-};
-
-function toggleAggregator(state: IAdminVideoFeedComponentState, props: IAdminVideoFeedComponentProps) {
-  return {
-    isAggregatorVisible: !state.isAggregatorVisible
-  };
-}
+interface IAdminVideoFeedComponentState {};
 
 export class AdminVideoFeedComponent extends React.Component<IAdminVideoFeedComponentProps, IAdminVideoFeedComponentState> {
-  state = {
-    isAggregatorVisible: false
-  };
-
   constructor(props) {
     super(props);
   }
@@ -39,31 +27,12 @@ export class AdminVideoFeedComponent extends React.Component<IAdminVideoFeedComp
     // Props
     const { videos, onVideoSave } = this.props;
 
-    // State
-    const { isAggregatorVisible } = this.state;
-
     return (
       <div className="AdminVideoFeedComponent">
-        {!isAggregatorVisible && <button type="button" onClick={() => {
-          this.setState(toggleAggregator);
-        }}>
-          Agregar video
-        </button>}
-
-        {
-          isAggregatorVisible && <button type="button" onClick={() => {
-          this.setState(toggleAggregator);
-        }}>
-          Descartar
-        </button>
-        }
-
-        {
-          isAggregatorVisible && <VideoAggregatorComponent
-            onSave={onVideoSave}
-            onLoadStart={() => { this.setState(toggleAggregator); }}
-          />
-        }
+        
+        <VideoAggregatorComponent
+          onSave={onVideoSave}
+        />
 
         <hr/>
         <ul>
@@ -72,6 +41,18 @@ export class AdminVideoFeedComponent extends React.Component<IAdminVideoFeedComp
               return (
                 <li key={index}>
                   {video.title}
+                  
+                  <button type="button" style={{display: index === 0 && 'none' }}>
+                    Subir
+                    <i className="fa fa-arrow-up"></i>
+                  </button>
+                  
+                  <button type="button" style={{display: index === videos.length - 1 && 'none' }}>
+                    Bajar
+                    <i className="fa fa-arrow-down"></i>
+                  </button>
+                  
+ 
                 </li>
               );
             })

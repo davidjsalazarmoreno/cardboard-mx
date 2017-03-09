@@ -6,8 +6,6 @@ export interface ILoadingStateHOCOwnProps {
   loadingText?: string;
   toggleLoadingState?: ( text?: string ) => void;
   setLoadingText?: ( text?: string ) => void;
-  onLoadStart?: any;
-  onLoadEnd?: any;
 };
 
 export interface ILoadingStateHOCState {
