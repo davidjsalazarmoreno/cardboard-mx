@@ -9,15 +9,9 @@ import {VideoAggregatorComponent} from '../components/video-aggregator/video-agg
 
 // Utils
 import {extractYoutubeId} from '../utils/index';
+
 class Wrapper extends React.Component<any, any> {
   state = {
-    isAValidUrl: false,
-    currentVideo: {
-      title: '',
-      description: '',
-      url: '',
-      category: ''
-    },
     videos: []
   }
 
@@ -25,17 +19,27 @@ class Wrapper extends React.Component<any, any> {
     super(props);
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    console.log(this.state.videos);
+  }  
+
   render() {
-    // State
-    const { isAValidUrl } = this.state;
 
     return (
       <VideoAggregatorComponent
         onSave={(video) => {
           console.log(video);
-          return new Promise((resolve, reject) => {
-            resolve(true);
+          const promise = new Promise((resolve, reject) => {
+            setTimeout(() => {
+              this.setState({
+                ...this.state,
+                videos: [ ...this.state.videos, video ]
+              });
+              resolve(true);
+            }, 3000);
           });
+
+          return promise;
         }}
       />
     )

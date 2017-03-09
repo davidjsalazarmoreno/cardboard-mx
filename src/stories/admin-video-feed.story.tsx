@@ -53,6 +53,39 @@ class Wrapper extends React.Component<any,any> {
     super(props);
   }
 
+  render() {
+    return (
+      <div>
+        <AdminVideoFeedComponent
+          videos={this.state.videos}
+          onVideoSave={(video) => {
+            console.log(video);
+            return new Promise((resolve, reject) => {
+              setTimeout(() => {
+                this.setState({
+                ...this.state,
+                videos: [ ...this.state.videos, video ]
+              });
+
+              resolve(true);
+              }, 3000);
+            });
+          }}
+        />
+      </div>
+    );
+  }
+  
+}
+class WrapperFirebase extends React.Component<any,any> {
+  state = {
+    videos: []
+  };
+
+  constructor(props) {
+    super(props);
+  }
+
   componentDidMount () {
     remoteVideosRef.once('value').then((snapshot) => {
       console.log(snapshot.val());
@@ -100,18 +133,8 @@ class Wrapper extends React.Component<any,any> {
 
 storiesOf('AdminVideoFeedComponent', module)
   .add('default view', () => (
-    <div>
-      <AdminVideoFeedComponent
-        videos={videos}
-        onVideoSave={(video) => {
-          console.log(video);
-          return new Promise((resolve, reject) => {
-            resolve(true);
-          });
-        }}
-      />
-    </div>
+    <Wrapper />
   ))
   .add('video list from firebase', () => (
-    <Wrapper />
+    <WrapperFirebase />
   ))

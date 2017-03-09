@@ -18,7 +18,6 @@ interface IAdminVideoFeedComponentProps extends IPublicVideoFeedComponentProps {
 // State
 interface IAdminVideoFeedComponentState {
   isAggregatorVisible: boolean;
-  isAValidUrl: boolean;
 };
 
 function toggleAggregator(state: IAdminVideoFeedComponentState, props: IAdminVideoFeedComponentProps) {
@@ -29,12 +28,11 @@ function toggleAggregator(state: IAdminVideoFeedComponentState, props: IAdminVid
 
 export class AdminVideoFeedComponent extends React.Component<IAdminVideoFeedComponentProps, IAdminVideoFeedComponentState> {
   state = {
-    isAggregatorVisible: false,
-    isAValidUrl: false
+    isAggregatorVisible: false
   };
 
   constructor(props) {
-    super(props);;
+    super(props);
   }
 
   render () {
@@ -42,7 +40,7 @@ export class AdminVideoFeedComponent extends React.Component<IAdminVideoFeedComp
     const { videos, onVideoSave } = this.props;
 
     // State
-    const { isAggregatorVisible, isAValidUrl } = this.state;
+    const { isAggregatorVisible } = this.state;
 
     return (
       <div className="AdminVideoFeedComponent">

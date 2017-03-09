@@ -18,7 +18,17 @@ storiesOf('VideoRatingComponent', module)
           up: 200,
           down: 15
         }}
-        onThumbClick={( upOrDown ) => console.log(upOrDown)}
+        onThumbClick={( upOrDown ) => {
+          console.log(upOrDown);
+
+          const promise: Promise<boolean> = new Promise((resolve, reject) => {
+            setTimeout(() => {
+              resolve(true);
+            }, 3000);
+          });
+
+          return promise;
+        }}
       />
     </div>
   ));

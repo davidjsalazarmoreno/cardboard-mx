@@ -56,13 +56,25 @@ export class PublicVideoFeedComponent extends React.Component<IPublicVideoFeedCo
       >
         <VideoRatingComponent 
           count={{ up: video.rating.up, down: video.rating.down }}
-          onThumbClick={() => console.log('thumb')}
+          onThumbClick={( upOrDown ) => {
+            console.log(upOrDown);
+
+            const promise = new Promise((resolve, reject) => {
+              setTimeout(() => {
+                resolve(true);
+              }, 3000);
+            });
+
+            return promise;
+          }}
         />
         <VideoCommentsComponent 
           comments={video.comments}
           onSave={() => {
             const promise = new Promise((resolve, reject) => {
-              resolve(true);
+              setTimeout(() => {
+                resolve(true);
+              }, 3000);
             });
 
             return promise;

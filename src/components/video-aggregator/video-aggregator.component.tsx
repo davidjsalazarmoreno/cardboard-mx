@@ -1,6 +1,9 @@
 // React
 import * as React from 'react';
 
+// HOC
+import {LoadingStateHOC, ILoadingStateHOCOwnProps} from '../hoc/loading-state.hoc';
+
 // Utils
 import {extractYoutubeId} from '../../utils/index';
 
@@ -14,16 +17,15 @@ interface IVideoAggregatorComponentProps {
 
 // Props
 interface IVideoAggregatorComponentState {
-  isLoading: boolean;
   title: string;
   url: string; 
   category: string; 
   description: string; 
 };
 
-export class VideoAggregatorComponent extends React.Component<IVideoAggregatorComponentProps, IVideoAggregatorComponentState> {
+@LoadingStateHOC()
+export class VideoAggregatorComponent extends React.Component<IVideoAggregatorComponentProps & ILoadingStateHOCOwnProps, IVideoAggregatorComponentState> {
   state = {
-    isLoading: true,
     title: '',
     url: '',
     category: '',
@@ -51,10 +53,10 @@ export class VideoAggregatorComponent extends React.Component<IVideoAggregatorCo
 
   render () {
     // Props
-    const { onSave } = this.props;
+    const { onSave, isLoading, loadingText, toggleLoadingState } = this.props;
 
     // State 
-    const { isLoading, title, url, category, description } = this.state;
+    const { title, url, category, description } = this.state;
 
     // Event handlers
     const { handleInputChange } = this;
@@ -66,6 +68,8 @@ export class VideoAggregatorComponent extends React.Component<IVideoAggregatorCo
         <form onSubmit={(event) => {
           event.preventDefault();
 
+          toggleLoadingState('Agregando enlace, por favor espera.');
+
           onSave({
             title,
             url,
@@ -74,8 +78,10 @@ export class VideoAggregatorComponent extends React.Component<IVideoAggregatorCo
             type: 'youtube',
             rating: { up: 0, down: 0 }
           }).then(success => {
+            toggleLoadingState('');
             console.log(success);
           }).catch(error => {
+            toggleLoadingState('Hubo un error agregando el enlace, por favor intenta de nuevo.');
             console.log(error);
           })
         }}>
@@ -84,11 +90,6 @@ export class VideoAggregatorComponent extends React.Component<IVideoAggregatorCo
           </label>
           <input type="text" id="url" onChange={handleInputChange} maxLength={150} required />
 
-          <label htmlFor="category">
-            Categoría
-          </label>
-          <input type="text" id="category" onChange={handleInputChange} disabled={!isAValidUrl} maxLength={150} required />
-          
           <label htmlFor="title">
             Titulo
           </label>
@@ -99,13 +100,22 @@ export class VideoAggregatorComponent extends React.Component<IVideoAggregatorCo
           </label>
           <input type="text" id="description" onChange={handleInputChange} disabled={!isAValidUrl} maxLength={150} required />
 
+          <label htmlFor="category">
+            Categoría
+          </label>
+          <input type="text" id="category" onChange={handleInputChange} disabled={!isAValidUrl} maxLength={150} required />
+          
           {
             !isAValidUrl && <p>
               Por favor ingresa un enlace de youtube
             </p>
           }
 
-          <button type="submit"disabled={!isAValidUrl}>
+          <p className="error">
+            {loadingText}
+          </p>
+
+          <button type="submit" disabled={!isAValidUrl}>
             Agregar enlace
           </button>
         </form>

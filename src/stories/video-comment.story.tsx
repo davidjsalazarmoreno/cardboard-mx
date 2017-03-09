@@ -19,7 +19,9 @@ storiesOf('VideoCommentsComponent', module)
         ]}
         onSave={() => {
           const promise = new Promise((resolve, reject) => {
-            resolve(true);
+            setTimeout(() => {
+              resolve(true);
+            }, 3000);
           });
 
           return promise;

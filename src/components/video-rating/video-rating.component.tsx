@@ -1,11 +1,8 @@
 // React
 import * as React from 'react';
 
-// React Lazy Load
-const LazyLoad = require('react-lazyload').default;
-
-// Components
-import {VideoPlayerComponent} from '../video-player/video-player.component';
+// HOC
+import {LoadingStateHOC, ILoadingStateHOCOwnProps} from '../hoc/loading-state.hoc';
 
 // Styles
 import './video-rating.component.scss';
@@ -15,14 +12,15 @@ interface IVideoRatingComponentProps {
     up: number,
     down: number;
   };
-  onThumbClick: ( upOrDown: string ) => void;
+  onThumbClick: ( upOrDown: string ) => Promise<boolean>;
 };
 
 interface IVideoRatingComponentState {
 
 };
 
-export class VideoRatingComponent extends React.Component<IVideoRatingComponentProps, IVideoRatingComponentState> {
+@LoadingStateHOC()
+export class VideoRatingComponent extends React.Component<IVideoRatingComponentProps & ILoadingStateHOCOwnProps, IVideoRatingComponentState> {
 
   constructor(props) {
     super(props);
@@ -33,12 +31,21 @@ export class VideoRatingComponent extends React.Component<IVideoRatingComponentP
 
   handleThumbClick( event ) {
     // Props
-    const { count, onThumbClick } = this.props;
+    const { count, onThumbClick, toggleLoadingState } = this.props;
 
     // Dataset
     const dataThumb: string = event.currentTarget.dataset.thumb;
 
-    onThumbClick( dataThumb );
+    toggleLoadingState('Guardando puntaje');
+
+    onThumbClick( dataThumb ).then(success => {
+      this.props.toggleLoadingState('');
+
+    }).catch(error => {
+      console.log(error);
+      this.props.toggleLoadingState('Hubo un error guardando el puntaje, intenta de nuevo por favor.');
+
+    });
   }
 
   render() {

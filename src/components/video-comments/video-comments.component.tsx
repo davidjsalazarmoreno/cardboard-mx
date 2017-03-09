@@ -1,6 +1,9 @@
 // React
 import * as React from 'react';
 
+// HOC
+import {LoadingStateHOC, ILoadingStateHOCOwnProps} from '../hoc/loading-state.hoc';
+
 // Props
 interface IVideoCommentsComponentProps {
   comments: Array<{
@@ -12,14 +15,13 @@ interface IVideoCommentsComponentProps {
 
 // State
 interface IVideoCommentsComponentState {
-  isLoading: boolean;
   name: string;
   comment: string;
 };
 
-export class VideoCommentsComponent extends React.Component<IVideoCommentsComponentProps, IVideoCommentsComponentState> {
+@LoadingStateHOC()
+export class VideoCommentsComponent extends React.Component<IVideoCommentsComponentProps & ILoadingStateHOCOwnProps, IVideoCommentsComponentState> {
   state = {
-    isLoading: true,
     name: '',
     comment: ''
   };
@@ -45,10 +47,10 @@ export class VideoCommentsComponent extends React.Component<IVideoCommentsCompon
 
   render () {
     // Props
-    const { comments, onSave } = this.props;
+    const { comments, loadingText, onSave } = this.props;
 
     // State 
-    const { isLoading, comment, name  } = this.state;
+    const { comment, name } = this.state;
 
     // Event handlers
     const { handleNewCommentChange } = this;
@@ -75,9 +77,18 @@ export class VideoCommentsComponent extends React.Component<IVideoCommentsCompon
         <form onSubmit={event => {
           event.preventDefault();
 
+          this.props.toggleLoadingState('Agregando comentario, espera.');
+
           onSave({
             name,
             comment
+          }).then(success => {
+            this.props.toggleLoadingState('');
+
+          }).catch(error => {
+            console.log(error);
+            this.props.toggleLoadingState('Hubo un error agregando el comentario, intenta de nuevo por favor.');
+
           });
         }}>
           <h3>Agregar comentario</h3>
@@ -92,6 +103,10 @@ export class VideoCommentsComponent extends React.Component<IVideoCommentsCompon
             Comentario
           </label>
           <textarea id="comment" onChange={handleNewCommentChange} required></textarea>
+
+          <p className="error-message">
+            {loadingText}
+          </p>
 
           <button type="submit">
             Agregar

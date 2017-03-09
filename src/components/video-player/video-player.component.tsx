@@ -1,34 +1,37 @@
 // React
 import * as React from 'react';
 
+// HOC
+import {LoadingStateHOC, ILoadingStateHOCOwnProps} from '../hoc/loading-state.hoc';
+
 // Props
 interface IVideoPlayerComponentProps {
   url: string;
 };
 
 // State
-interface IVideoPlayerComponentState {
-  isLoading: boolean;
-};
+interface IVideoPlayerComponentState {};
 
-export class VideoPlayerComponent extends React.Component<IVideoPlayerComponentProps, IVideoPlayerComponentState> {
-  state = {
-    isLoading: true
-  };
+@LoadingStateHOC({ spinner: false })
+export class VideoPlayerComponent extends React.Component<IVideoPlayerComponentProps & ILoadingStateHOCOwnProps, IVideoPlayerComponentState> {
+
+  constructor(props) {
+    super(props);
+  }
+
+   componentWillMount () {
+    this.props.toggleLoadingState('Cargando reproductor, espera.');
+  }
+  
 
   render () {
     // Props
-    const { url } = this.props;
-
-    // State 
-    const { isLoading } = this.state;
+    const { url, isLoading, loadingText } = this.props;
 
     return (
       <div className="VideoPlayerComponent">
         {
-          isLoading && <h2>
-            Cargando reproductor, espera.
-          </h2>
+          isLoading && <h2> {loadingText} <i className="fa fa-circle-o-notch fa-spin fa-fw"></i> </h2>
         }
         <iframe 
           src={`${url}`} 
@@ -39,8 +42,7 @@ export class VideoPlayerComponent extends React.Component<IVideoPlayerComponentP
           onLoad={() => {
             if ( isLoading ) {
               console.info('Iframe onload');
-              const newState = { ...this.state, isLoading: false };
-              this.setState( newState );    
+              this.props.toggleLoadingState('');
             }
           }}
         >
