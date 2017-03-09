@@ -20,7 +20,6 @@ interface IPublicVideoFeedComponentProps {
   videos: Array<{
     type: string;
     url: string;
-    id: string;
     title: string;
     description: string;
     category: string;
@@ -96,8 +95,7 @@ export class PublicVideoFeedComponent extends React.Component<IPublicVideoFeedCo
       <div className="PublicVideoFeedComponent">
         {
           videos.map((video, index) => {
-            const { id, 
-                    category, 
+            const { category, 
                     description, 
                     title, 
                     type, 
@@ -107,7 +105,7 @@ export class PublicVideoFeedComponent extends React.Component<IPublicVideoFeedCo
 
             return (
               <div 
-                key={id}
+                key={url}
                 onClick={() => {
                   const newState = ({
                     ...this.state,
@@ -120,7 +118,7 @@ export class PublicVideoFeedComponent extends React.Component<IPublicVideoFeedCo
                 }}
               >
                 <VideoThumbnailComponent
-                  id={id}
+                  id={url}
                   type={type}
                   alt={description}
                   url={extractYoutubeId( url )}

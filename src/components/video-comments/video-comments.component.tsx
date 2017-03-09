@@ -62,8 +62,8 @@ export class VideoCommentsComponent extends React.Component<IVideoCommentsCompon
           {
             comments.map(({name, comment}) => {
               return (
-                <li>
-                  <b>name</b>: {comment}
+                <li key={name}>
+                  <b>{name}</b>: {comment}
                 </li>
               );
             })
