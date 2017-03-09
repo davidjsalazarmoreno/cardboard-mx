@@ -7,15 +7,11 @@ import { storiesOf, action, module } from '@kadira/storybook';
 // Components
 import {VideoAggregatorComponent} from '../components/video-aggregator/video-aggregator.component';
 
-/**
- * Youtube video pattern
- * Source: http://stackoverflow.com/questions/3717115/regular-expression-for-youtube-links
- */
-const pattern = /http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?/;
-
+// Utils
+import {extractYoutubeId} from '../utils/index';
 class Wrapper extends React.Component<any, any> {
   state = {
-    isValidUrl: false,
+    isAValidUrl: false,
     currentVideo: {
       title: '',
       description: '',
@@ -31,51 +27,15 @@ class Wrapper extends React.Component<any, any> {
 
   render() {
     // State
-    const { isValidUrl } = this.state;
+    const { isAValidUrl } = this.state;
 
     return (
       <VideoAggregatorComponent
-        isAValidUrl={isValidUrl}
-        onInputChange={event => {
-          const target = event.target;
-          const id: string = target.id;
-          const value: string = event.target.value;
-
-          this.setState({ 
-            ...this.state, 
-            currentVideo: {
-              ...this.state.currentVideo,
-              [id]: value 
-            }
+        onSave={(video) => {
+          console.log(video);
+          return new Promise((resolve, reject) => {
+            resolve(true);
           });
-        }}
-        onAggregatorInputChange={event => {
-          const target = event.target;
-          const id: string = target.id;
-          const value: string = event.target.value;
-          const matches = value.match(pattern);
-
-          if ( matches && matches.length > 0 ) {
-            this.setState({ 
-              ...this.state, 
-              isValidUrl: true,
-              currentVideo: {
-                ...this.state.currentVideo,
-                [id]: value 
-              }
-            });
-            console.log(matches[1]);
-            return;
-          }
-
-          this.setState({ ...this.state, isValidUrl: false });
-          return;
-          
-        }}
-        onSave={(event) => {
-          event.preventDefault();
-          
-          
         }}
       />
     )

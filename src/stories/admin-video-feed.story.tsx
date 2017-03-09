@@ -11,7 +11,7 @@ import { storiesOf, action, module } from '@kadira/storybook';
 import {IVideo} from '../interfaces';
 
 // Components
-import {PublicVideoFeedComponent} from '../components/public-video-feed/public-video-feed.component';
+import {AdminVideoFeedComponent} from '../components/admin-video-feed/admin-video-feed.component';
 
 const videos: Array<IVideo> = [
   { 
@@ -44,10 +44,6 @@ const videos: Array<IVideo> = [
 
 const remoteVideosRef = firebase.database().ref('cardboard/');
 
-// remoteVideosRef.set({
-//   'videos': videos
-// });
-
 class Wrapper extends React.Component<any,any> {
   state = {
     videos: []
@@ -70,14 +66,31 @@ class Wrapper extends React.Component<any,any> {
   render() {
     return (
       <div>
-        <PublicVideoFeedComponent
+        <AdminVideoFeedComponent
           videos={this.state.videos}
-          onPlay={() => {
-            console.log('play');
-          }}
-          onBackToFeed={() => {
-            console.log('back to feed');
-          }}
+          onVideoSave={video => {
+          const videosWithTheNew = [ ...this.state.videos, video ];
+
+          return new Promise((resolve, reject) => {
+            console.log(videos);
+
+            remoteVideosRef.set({
+              'videos': videosWithTheNew
+            }).then((...args) => {
+              console.log(args);
+              this.setState({
+                ...this.state,
+                videos: videosWithTheNew
+              })
+              resolve(true);
+
+            }).catch(error => {
+              console.log(error);
+              resolve(false);
+            });
+
+          });
+        }}
         />
       </div>
     );
@@ -85,16 +98,16 @@ class Wrapper extends React.Component<any,any> {
   
 }
 
-storiesOf('PublicVideoFeedComponent', module)
+storiesOf('AdminVideoFeedComponent', module)
   .add('default view', () => (
     <div>
-      <PublicVideoFeedComponent
+      <AdminVideoFeedComponent
         videos={videos}
-        onPlay={() => {
-          console.log('play');
-        }}
-        onBackToFeed={() => {
-          console.log('back to feed');
+        onVideoSave={(video) => {
+          console.log(video);
+          return new Promise((resolve, reject) => {
+            resolve(true);
+          });
         }}
       />
     </div>

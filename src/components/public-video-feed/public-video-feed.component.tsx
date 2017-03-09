@@ -4,6 +4,9 @@ import * as React from 'react';
 // React Lazy Load
 const LazyLoad = require('react-lazyload').default;
 
+// Interfaces
+import {IVideo} from '../../interfaces';
+
 // Components
 import {VideoThumbnailComponent} from '../video-thumbnail/video-thumbnail.component';
 import {VideoPlayerComponent} from '../video-player/video-player.component';
@@ -16,21 +19,13 @@ import {extractYoutubeId} from '../../utils/index';
 // Styles
 import './public-video-feed.component.scss';
 
-interface IPublicVideoFeedComponentProps {
-  videos: Array<{
-    type: string;
-    url: string;
-    title: string;
-    description: string;
-    category: string;
-    comments: Array<{ name: string, comment: string }>,
-    rating: { up: number, down: number };
-  }>;
-  onPlay: () => void;
-  onBackToFeed: () => void;
+export interface IPublicVideoFeedComponentProps {
+  videos: Array<IVideo>;
+  onPlay?: () => void;
+  onBackToFeed?: () => void;
 };
 
-interface IPublicVideoFeedComponentState {
+export interface IPublicVideoFeedComponentState {
   isPlaying: boolean;
   indexOfSelectedVideo: number;
 };
@@ -131,7 +126,7 @@ export class PublicVideoFeedComponent extends React.Component<IPublicVideoFeedCo
                 </b>
 
                 <br/>
-                <b>Comments</b>: {comments.length}
+                <b>Comments</b>: {comments ? comments.length : 0}
                 <br/>
 
                 <b>Rating</b>:

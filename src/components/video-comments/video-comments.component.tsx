@@ -60,13 +60,13 @@ export class VideoCommentsComponent extends React.Component<IVideoCommentsCompon
 
         <ul>
           {
-            comments.map(({name, comment}) => {
+            comments ? comments.map(({name, comment}) => {
               return (
                 <li key={name}>
                   <b>{name}</b>: {comment}
                 </li>
               );
-            })
+            }) : <li>Sin comentarios, ¡sé el primero!</li>
           }
         </ul>
 
@@ -89,7 +89,7 @@ export class VideoCommentsComponent extends React.Component<IVideoCommentsCompon
 
 
           <label htmlFor="comment">
-            Nombre
+            Comentario
           </label>
           <textarea id="comment" onChange={handleNewCommentChange} required></textarea>
 
