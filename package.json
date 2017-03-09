@@ -8,15 +8,21 @@
   "license": "MIT",
   "dependencies": {
     "firebase": "^3.7.0",
+    "font-awesome": "^4.7.0",
     "getstorybook": "^1.7.0",
+    "normalize.css": "^5.0.0",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
-    "react-firebase": "^2.2.2"
+    "react-firebase": "^2.2.2",
+    "react-lazyload": "^2.2.4"
   },
   "devDependencies": {
     "@kadira/storybook": "^2.21.0",
+    "@types/node": "^7.0.6",
     "@types/react": "^15.0.14",
     "css-loader": "^0.26.2",
+    "node-sass": "^4.5.0",
+    "raw-loader": "^0.5.1",
     "sass-loader": "^6.0.2",
     "style-loader": "^0.13.2",
     "ts-loader": "^2.0.1",

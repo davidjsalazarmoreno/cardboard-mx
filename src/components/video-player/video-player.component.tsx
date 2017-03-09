@@ -45,6 +45,7 @@ export class VideoPlayerComponent extends React.Component<IVideoPlayerComponentP
           }}
         >
         </iframe>
+        {this.props.children}
       </div>
     )
   }
