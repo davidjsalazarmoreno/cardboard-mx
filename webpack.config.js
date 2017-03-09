@@ -1,17 +1,17 @@
-var CopyWebpackPlugin = require('copy-webpack-plugin'),
-    ExtractTextPlugin = require('extract-text-webpack-plugin'),
-    webpack = require('webpack'),
-    path = require('path');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var webpack = require('webpack');
+var path = require('path');
 
 module.exports = {
   entry: [
   //  'webpack-dev-server/client?http://0.0.0.0:8000', // WebpackDevServer host and port
   //  'webpack/hot/only-dev-server', // "only" prevents reload on syntax errors
-    path.resolve( __dirname, 'src/portfolio/Bootstrap.tsx' )
+    path.resolve( __dirname, 'src/Bootstrap.tsx' )
   ],
-  // node: {
-  //   fs: "empty"
-  // },
+  node: {
+    fs: "empty"
+  },
   output: {
     filename: 'app.js',
     path: path.resolve( __dirname, 'docs/' )
@@ -26,8 +26,8 @@ module.exports = {
   devtool: 'source-map',
 
   resolve: {
-      // Add '.ts' and '.tsx' as resolvable extensions.
-      extensions: ['', '.webpack.js', '.web.js', '.ts', '.tsx', '.js']
+    // Add '.ts' and '.tsx' as resolvable extensions.
+    extensions: ['', '.webpack.js', '.web.js', '.ts', '.tsx', '.js']
   },
 
   module: {
@@ -56,14 +56,14 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
-        'NODE_ENV': JSON.stringify('production')
+        'NODE_ENV': JSON.stringify('development')
       }
     }),
     new CopyWebpackPlugin([
-      { 
-        from: path.resolve( __dirname, 'src/assets' ),
-        to: path.resolve( __dirname, 'docs/assets' ) 
-      },
+      // { 
+      //   from: path.resolve( __dirname, 'src/assets' ),
+      //   to: path.resolve( __dirname, 'docs/assets' ) 
+      // },
       { 
         from: path.resolve( __dirname, 'src/views/index.html' ),
         to: path.resolve( __dirname, 'docs/index.html' ) 
@@ -82,6 +82,8 @@ module.exports = {
   // dependencies, which allows browsers to cache those libraries between builds.
   externals: {
     'react': 'React',
-    'react-dom': 'ReactDOM'
+    'react-dom': 'ReactDOM',
+    'redux': 'Redux',
+    'react-redux': 'ReactRedux',
   }
 };

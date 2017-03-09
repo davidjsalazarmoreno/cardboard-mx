@@ -3,12 +3,12 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
 // Root Component
-// import {Root} from './root';
+import {Root} from './Root';
 
-// (window as any).addEventListener('load', function() {
-//   ReactDOM.render(
-//     <Root />,
-//     document.getElementById('root')
-//   );
+(window as any).addEventListener('DOMContentLoaded', function() {
+  ReactDOM.render(
+    <Root />,
+    document.getElementById('root')
+  );
 
-// });
+});

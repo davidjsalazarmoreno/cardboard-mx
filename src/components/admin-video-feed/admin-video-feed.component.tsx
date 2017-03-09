@@ -59,8 +59,9 @@ export class AdminVideoFeedComponent extends React.Component<IAdminVideoFeedComp
         }
 
         {
-          isAggregatorVisible && <VideoAggregatorComponent 
+          isAggregatorVisible && <VideoAggregatorComponent
             onSave={onVideoSave}
+            onLoadStart={() => { this.setState(toggleAggregator); }}
           />
         }
 

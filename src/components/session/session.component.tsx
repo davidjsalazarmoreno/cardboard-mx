@@ -1,23 +1,26 @@
 // React
 import * as React from 'react';
 
+// HOC
+import {LoadingStateHOC, ILoadingStateHOCOwnProps} from '../hoc/loading-state.hoc';
+
 // Props
 interface ISessionComponentProps {
+  currentUser: { username: string };
   onSave: ( username, password ) => Promise<any>;
 };
 
 // State
 interface ISessionComponentState {
   isLogged: boolean;
-  isLoading: boolean;
   username: string;
   password: string;
 };
 
-export class SessionComponent extends React.Component<ISessionComponentProps, ISessionComponentState> {
+@LoadingStateHOC()
+export class SessionComponent extends React.Component<ISessionComponentProps & ILoadingStateHOCOwnProps, ISessionComponentState> {
   state = {
     isLogged: false,
-    isLoading: false,
     username: '',
     password: ''
   };
@@ -25,8 +28,12 @@ export class SessionComponent extends React.Component<ISessionComponentProps, IS
   constructor(props) {
     super(props);
 
+
     // Event handlers
     this.handleInputChange = this.handleInputChange.bind(this);
+
+    // Render methods
+    this.renderUserCard = this.renderUserCard.bind(this);
   }
 
   handleInputChange( event ) {
@@ -41,9 +48,17 @@ export class SessionComponent extends React.Component<ISessionComponentProps, IS
 
   }
 
+  renderUserCard() {
+    return (
+      <div>
+        {this.props.currentUser.usernameS}
+      </div>
+    )
+  }
+
   render () {
     // Props
-    const { onSave } = this.props;
+    const { onSave, toggleLoadingState } = this.props;
 
     // State 
     const { username, password } = this.state;
@@ -57,10 +72,20 @@ export class SessionComponent extends React.Component<ISessionComponentProps, IS
         <form onSubmit={event => {
           event.preventDefault();
 
+          toggleLoadingState('Iniciando sesión');
+
           onSave( username, password ).then(success => {
             console.log(success);
+            toggleLoadingState('');
+
+            this.setState({
+              ...this.state,
+              isLogged: true
+            });
+
           }).catch(error => {
             console.log(error);
+            toggleLoadingState('Hubo un error al iniciar sesión, intenta de nuevo');
           });
         }}>
           <h3>
@@ -79,7 +104,7 @@ export class SessionComponent extends React.Component<ISessionComponentProps, IS
           <input id="password" type="password" onChange={handleInputChange} required />
 
           <button type="submit">
-            Iniciar sesión
+            Aceptar
           </button>
         </form>
 

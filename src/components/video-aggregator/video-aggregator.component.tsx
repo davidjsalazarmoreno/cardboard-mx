@@ -53,7 +53,7 @@ export class VideoAggregatorComponent extends React.Component<IVideoAggregatorCo
 
   render () {
     // Props
-    const { onSave, isLoading, loadingText, toggleLoadingState } = this.props;
+    const { onSave, isLoading, loadingText, toggleLoadingState, onLoadStart } = this.props;
 
     // State 
     const { title, url, category, description } = this.state;
@@ -78,11 +78,14 @@ export class VideoAggregatorComponent extends React.Component<IVideoAggregatorCo
             type: 'youtube',
             rating: { up: 0, down: 0 }
           }).then(success => {
+            onLoadStart();
             toggleLoadingState('');
             console.log(success);
+
           }).catch(error => {
             toggleLoadingState('Hubo un error agregando el enlace, por favor intenta de nuevo.');
             console.log(error);
+
           })
         }}>
           <label htmlFor="urlAggregator">
