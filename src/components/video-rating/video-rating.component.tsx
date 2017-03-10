@@ -7,17 +7,17 @@ import {LoadingStateHOC, ILoadingStateHOCOwnProps} from '../hoc/loading-state.ho
 // Styles
 import './video-rating.component.scss';
 
+type TUpOrDown = 'up' | 'down';
+
 interface IVideoRatingComponentProps {
   count: {
     up: number,
     down: number;
   };
-  onThumbClick: ( upOrDown: string ) => Promise<boolean>;
+  onThumbClick: ( upOrDown: TUpOrDown ) => Promise<boolean>;
 };
 
-interface IVideoRatingComponentState {
-
-};
+interface IVideoRatingComponentState {};
 
 @LoadingStateHOC()
 export class VideoRatingComponent extends React.Component<IVideoRatingComponentProps & ILoadingStateHOCOwnProps, IVideoRatingComponentState> {
@@ -34,7 +34,7 @@ export class VideoRatingComponent extends React.Component<IVideoRatingComponentP
     const { count, onThumbClick, toggleLoadingState } = this.props;
 
     // Dataset
-    const dataThumb: string = event.currentTarget.dataset.thumb;
+    const dataThumb = event.currentTarget.dataset.thumb;
 
     toggleLoadingState('Guardando puntaje');
 

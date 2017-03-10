@@ -10,19 +10,34 @@ import {VideoRatingComponent} from '../components/video-rating/video-rating.comp
 // Utils
 import {extractYoutubeId} from '../utils/index';
 
-storiesOf('VideoRatingComponent', module)
-  .add('default view', () => (
-    <div>
+
+class Wrapper extends React.Component<any, any> {
+  state = {
+    up: 200,
+    down: 15
+  };
+
+  constructor(props) {
+    super(props)
+  }
+
+  render() {
+    return (
+      <div>
       <VideoRatingComponent 
-        count={{
-          up: 200,
-          down: 15
-        }}
+        count={this.state}
         onThumbClick={( upOrDown ) => {
           console.log(upOrDown);
 
           const promise: Promise<boolean> = new Promise((resolve, reject) => {
             setTimeout(() => {
+              const newState = ({
+                ...this.state,
+                [upOrDown]: this.state[ upOrDown ]++
+              });
+
+              this.setState(newState);
+
               resolve(true);
             }, 3000);
           });
@@ -31,4 +46,11 @@ storiesOf('VideoRatingComponent', module)
         }}
       />
     </div>
+    );
+  }
+}
+
+storiesOf('VideoRatingComponent', module)
+  .add('default view', () => (
+    <Wrapper />
   ));
