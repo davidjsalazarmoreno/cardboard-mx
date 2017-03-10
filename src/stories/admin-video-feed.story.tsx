@@ -13,6 +13,9 @@ import {IVideo} from '../interfaces';
 // Components
 import {AdminVideoFeedComponent} from '../components/admin-video-feed/admin-video-feed.component';
 
+// Utils
+import {arrayUtils} from '../utils/index';
+
 const videos: Array<IVideo> = [
   { 
     title: 'Preguntas de las que Nadie tiene las Respuestas (Versión completa)', 
@@ -94,50 +97,16 @@ class Wrapper extends React.Component<any,any> {
               });
 
               resolve(true);
-              }, 3000);
+              }, 1500);
             });
           }}
           onChangeVideoPosition={(index, direction) => {
             const length = this.state.videos.length - 1;
-            const dispatchTable = {
-              'up': ( index, currentVideos ) => {
-                const toRaise = currentVideos[ index ];
-                const toLower = currentVideos[ index - 1 ];
-
-                return currentVideos.map((element, idx) => {
-                  if ( (index - 1) === idx ) { return toRaise; }
-
-                  if( index === idx ) { return toLower; }
-
-                  return element;
-                });
-              },
-              'down': ( index, currentVideos ) => {
-                const toLower = currentVideos[ index ];
-                const toRaise = currentVideos[ index + 1 ];
-
-                return currentVideos.map((element, idx) => {
-                  if ( (index + 1) === idx ) { return toLower; }
-
-                  if( index === idx ) { return toRaise; }
-
-                  return element;
-                });
-              },
-              'delete': ( index, currentVideos ) => {
-                return currentVideos.map((element, idx) => {
-                  if( index === idx ) { return; }
-
-                  return element;
-
-                }).filter(element => element != null);
-              }
-            };
 
             return new Promise((resolve, reject) => {
 
               setTimeout(() => {
-                const rearrangedVideos = dispatchTable[ direction ]( index, this.state.videos );
+                const rearrangedVideos = arrayUtils[ direction ]( index, this.state.videos );
 
                 console.log(rearrangedVideos);
 
@@ -147,7 +116,7 @@ class Wrapper extends React.Component<any,any> {
                 });
 
                 resolve(true);
-              }, 3000);
+              }, 1500);
             });
 
 
@@ -204,43 +173,9 @@ class WrapperFirebase extends React.Component<any,any> {
           }}
           onChangeVideoPosition={(index, direction) => {
             const length = this.state.videos.length - 1;
-            const dispatchTable = {
-              'up': ( index, currentVideos ) => {
-                const toRaise = currentVideos[ index ];
-                const toLower = currentVideos[ index - 1 ];
-
-                return currentVideos.map((element, idx) => {
-                  if ( (index - 1) === idx ) { return toRaise; }
-
-                  if( index === idx ) { return toLower; }
-
-                  return element;
-                });
-              },
-              'down': ( index, currentVideos ) => {
-                const toLower = currentVideos[ index ];
-                const toRaise = currentVideos[ index + 1 ];
-
-                return currentVideos.map((element, idx) => {
-                  if ( (index + 1) === idx ) { return toLower; }
-
-                  if( index === idx ) { return toRaise; }
-
-                  return element;
-                });
-              },
-              'delete': ( index, currentVideos ) => {
-                return currentVideos.map((element, idx) => {
-                  if( index === idx ) { return; }
-
-                  return element;
-
-                }).filter(element => element != null);
-              },
-            };
 
             return new Promise((resolve, reject) => {
-              const rearrangedVideos = dispatchTable[ direction ]( index, this.state.videos );
+              const rearrangedVideos = arrayUtils[ direction ]( index, this.state.videos );
 
               remoteVideosRef.set({
                 'videos': rearrangedVideos

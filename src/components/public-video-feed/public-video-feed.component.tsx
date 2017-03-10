@@ -51,36 +51,49 @@ export class PublicVideoFeedComponent extends React.Component<IPublicVideoFeedCo
     const url = video.type === "youtube" ? `https://www.youtube.com/embed/${extractYoutubeId( video.url )}` : video.url;
  
     return (
-      <VideoPlayerComponent
-        url={url}
-      >
-        <VideoRatingComponent 
-          count={{ up: video.rating.up, down: video.rating.down }}
-          onThumbClick={( upOrDown ) => {
-            console.log(upOrDown);
+      <div>
+        <button type="button" onClick={() => {
+          this.setState({
+            ...this.state,
+            indexOfSelectedVideo: -1,
+            isPlaying: false
+          });
+        }}>
+          Volver
+        </button>
 
-            const promise = new Promise((resolve, reject) => {
-              setTimeout(() => {
-                resolve(true);
-              }, 3000);
-            });
+        <hr/>
+        
+        <VideoPlayerComponent
+          url={url}
+        >
+          <VideoRatingComponent 
+            count={{ up: video.rating.up, down: video.rating.down }}
+            onThumbClick={( upOrDown ) => {
 
-            return promise;
-          }}
-        />
-        <VideoCommentsComponent 
-          comments={video.comments}
-          onSave={() => {
-            const promise = new Promise((resolve, reject) => {
-              setTimeout(() => {
-                resolve(true);
-              }, 3000);
-            });
+              const promise = new Promise((resolve, reject) => {
+                setTimeout(() => {
+                  resolve(true);
+                }, 1500);
+              });
 
-            return promise;
-          }}
-        />
-      </VideoPlayerComponent>
+              return promise;
+            }}
+          />
+          <VideoCommentsComponent 
+            comments={video.comments}
+            onSave={( comment ) => {
+              const promise = new Promise((resolve, reject) => {
+                setTimeout(() => {
+                  resolve(true);
+                }, 3000);
+              });
+
+              return promise;
+            }}
+          />
+        </VideoPlayerComponent>
+      </div>
     );
   }
 
