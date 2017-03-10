@@ -28,6 +28,32 @@ const videos: Array<IVideo> = [
     rating: { up: 100, down: 1 }
   },
   { 
+    title: 'Titulo 2', 
+    description: 'En la primera de una nueva serie de TED-Ed diseñada para catalizar la curiosidad, Chris Anderson curador de TED comparte sus obsesiones de la niñez con preguntas peculiares que parecen no tener respuestas. (Introducción de la serie "Preguntas de las que Nadie tiene las Respuestas)', 
+    category: 'Educación', 
+    type: 'youtube', 
+    url: 'https://www.youtube.com/watch?v=7SWvDHvWXok',
+    comments: [
+      { name: 'foo', comment: 'lorem foo dolor' },
+      { name: 'bar', comment: 'lorem bar dolor' },
+      { name: 'baz', comment: 'lorem baz dolor' },
+    ],
+    rating: { up: 100, down: 1 }
+  },
+  { 
+    title: 'Titulo 3', 
+    description: 'En la primera de una nueva serie de TED-Ed diseñada para catalizar la curiosidad, Chris Anderson curador de TED comparte sus obsesiones de la niñez con preguntas peculiares que parecen no tener respuestas. (Introducción de la serie "Preguntas de las que Nadie tiene las Respuestas)', 
+    category: 'Educación', 
+    type: 'youtube', 
+    url: 'https://www.youtube.com/watch?v=7SWvDHvWXok',
+    comments: [
+      { name: 'foo', comment: 'lorem foo dolor' },
+      { name: 'bar', comment: 'lorem bar dolor' },
+      { name: 'baz', comment: 'lorem baz dolor' },
+    ],
+    rating: { up: 100, down: 1 }
+  },
+  { 
     title: '¿Puedes resolver el enigma del puente? - Alex Gendler', 
     description: 'Ir de prácticas a un laboratorio en plena montaña a lo mejor no fue la mejor idea.. Tirar de la palanca marcada con el símbolo de una calavera solo para ver qué pasa, probablemente tampoco fue muy inteligente,. Pero ahora no es el momento para lamentarse porque hay que alejarse de estos zombies mutantes... rápidamente. ¿Se puede usar la matemática para cruzar el puente junto a tus amigos antes de que lleguen los zombis? Alex Gendler muestra cómo hacerlo.', 
     category: 'Educación', 
@@ -46,7 +72,7 @@ const remoteVideosRef = firebase.database().ref('cardboard/');
 
 class Wrapper extends React.Component<any,any> {
   state = {
-    videos: []
+    videos: videos
   };
 
   constructor(props) {
@@ -70,6 +96,53 @@ class Wrapper extends React.Component<any,any> {
               resolve(true);
               }, 3000);
             });
+          }}
+          onChangeVideoPosition={(index, direction) => {
+            const length = this.state.videos.length - 1;
+            const dispatchTable = {
+              'up': ( index, currentVideos ) => {
+                const toRaise = currentVideos[ index ];
+                const toLower = currentVideos[ index - 1 ];
+
+                return currentVideos.map((element, idx) => {
+                  if ( (index - 1) === idx ) { return toRaise; }
+
+                  if( index === idx ) { return toLower; }
+
+                  return element;
+                });
+              },
+              'down': ( index, currentVideos ) => {
+                const toLower = currentVideos[ index ];
+                const toRaise = currentVideos[ index + 1 ];
+
+                return currentVideos.map((element, idx) => {
+                  if ( (index + 1) === idx ) { return toLower; }
+
+                  if( index === idx ) { return toRaise; }
+
+                  return element;
+                });
+              },
+            };
+
+            return new Promise((resolve, reject) => {
+
+              setTimeout(() => {
+                const rearrangedVideos = dispatchTable[ direction ]( index, this.state.videos );
+
+                console.log(rearrangedVideos);
+
+                this.setState({
+                  ...this.state,
+                  videos: rearrangedVideos
+                });
+
+                resolve(true);
+              }, 3000);
+            });
+
+
           }}
         />
       </div>
@@ -120,6 +193,56 @@ class WrapperFirebase extends React.Component<any,any> {
               });
 
             });
+          }}
+          onChangeVideoPosition={(index, direction) => {
+            const length = this.state.videos.length - 1;
+            const dispatchTable = {
+              'up': ( index, currentVideos ) => {
+                const toRaise = currentVideos[ index ];
+                const toLower = currentVideos[ index - 1 ];
+
+                return currentVideos.map((element, idx) => {
+                  if ( (index - 1) === idx ) { return toRaise; }
+
+                  if( index === idx ) { return toLower; }
+
+                  return element;
+                });
+              },
+              'down': ( index, currentVideos ) => {
+                const toLower = currentVideos[ index ];
+                const toRaise = currentVideos[ index + 1 ];
+
+                return currentVideos.map((element, idx) => {
+                  if ( (index + 1) === idx ) { return toLower; }
+
+                  if( index === idx ) { return toRaise; }
+
+                  return element;
+                });
+              },
+            };
+
+            return new Promise((resolve, reject) => {
+              const rearrangedVideos = dispatchTable[ direction ]( index, this.state.videos );
+
+              remoteVideosRef.set({
+                'videos': rearrangedVideos
+              }).then((...args) => {
+                console.log(args);
+                this.setState({
+                  ...this.state,
+                  videos: rearrangedVideos
+                })
+                resolve(true);
+
+              }).catch(error => {
+                console.log(error);
+                resolve(false);
+              });
+
+            });
+
           }}
         />
       </div>
