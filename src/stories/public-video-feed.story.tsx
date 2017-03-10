@@ -50,6 +50,83 @@ const remoteVideosRef = firebase.database().ref('cardboard/');
 
 class Wrapper extends React.Component<any,any> {
   state = {
+    videos: videos
+  };
+
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <div>
+        <PublicVideoFeedComponent
+          videos={this.state.videos}
+          onRatingSave={( index, upOrDown ) => {
+            const promise = new Promise((resolve, reject) => {
+              setTimeout(() => {
+                const newState = ({
+                  ...this.state,
+                  videos: this.state.videos.map((video, idx) => {
+                    if ( index === idx ) {
+                      const videoWithNewRating = ({
+                        ...video,
+                        rating: {
+                          ...video.rating,
+                          [upOrDown]: ++video.rating[upOrDown]
+                        }
+                      });
+
+                      return videoWithNewRating;
+                    }
+
+                    return video;
+                  })
+                })
+
+                this.setState(newState);
+
+                resolve(true);
+              }, 1500);
+             });
+
+            return promise;
+          }}
+          onCommentSave={( index, comment ) => {
+            const promise = new Promise((resolve, reject) => {
+              setTimeout(() => {
+                const newState = ({
+                  ...this.state,
+                  videos: this.state.videos.map((video, idx) => {
+                    if ( index === idx ) {
+                      const videoWithNewComment = ({
+                        ...video,
+                        comments: [ comment, ...video.comments ]
+                      });
+
+                      return videoWithNewComment;
+                    }
+
+                    return video;
+                  })
+                })
+
+                this.setState(newState);
+
+                resolve(true);
+              }, 1500);
+             });
+
+            return promise;
+          }}
+        />
+      </div>
+    );
+  }
+  
+}
+class WrapperFirebase extends React.Component<any,any> {
+  state = {
     videos: []
   };
 
@@ -72,11 +149,77 @@ class Wrapper extends React.Component<any,any> {
       <div>
         <PublicVideoFeedComponent
           videos={this.state.videos}
-          onPlay={() => {
-            console.log('play');
+          onRatingSave={( index, upOrDown ) => {
+            const newState = ({
+              ...this.state,
+              videos: this.state.videos.map((video, idx) => {
+                if ( index === idx ) {
+                  const videoWithNewRating = ({
+                    ...video,
+                    rating: {
+                      ...video.rating,
+                      [upOrDown]: ++video.rating[upOrDown]
+                    }
+                  });
+
+                  return videoWithNewRating;
+                }
+
+                return video;
+              })
+              
+            });
+
+            return new Promise((resolve, reject) => {
+              remoteVideosRef.set({
+                'videos': newState
+              }).then((...args) => {
+                this.setState(newState);
+                resolve(true);
+
+              }).catch(error => {
+                console.log(error);
+                resolve(false);
+
+              });
+            });
+
+
           }}
-          onBackToFeed={() => {
-            console.log('back to feed');
+          onCommentSave={( index, comment ) => {
+            const newState = ({
+              ...this.state,
+              videos: this.state.videos.map((video, idx) => {
+                if ( index === idx ) {
+                  const videoWithNewComment = ({
+                    ...video,
+                    comments: [ comment, ...video.comments ]
+                  });
+
+                  return videoWithNewComment;
+                }
+
+                return video;
+              })
+            });
+
+            console.log(newState);
+
+            return new Promise((resolve, reject) => {
+              remoteVideosRef.set({
+                'videos': newState
+              }).then((...args) => {
+                this.setState(newState);
+                resolve(true);
+
+              }).catch(error => {
+                console.log(error);
+                resolve(false);
+
+              });
+            });
+
+
           }}
         />
       </div>
@@ -87,18 +230,8 @@ class Wrapper extends React.Component<any,any> {
 
 storiesOf('PublicVideoFeedComponent', module)
   .add('default view', () => (
-    <div>
-      <PublicVideoFeedComponent
-        videos={videos}
-        onPlay={() => {
-          console.log('play');
-        }}
-        onBackToFeed={() => {
-          console.log('back to feed');
-        }}
-      />
-    </div>
+    <Wrapper />
   ))
   .add('video list from firebase', () => (
-    <Wrapper />
+    <WrapperFirebase />
   ))

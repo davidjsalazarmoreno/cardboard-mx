@@ -41,12 +41,6 @@ class PublicContainer extends React.Component<any, any> {
       <div className="PublicContainer">
         <PublicVideoFeedComponent 
           videos={this.props.videos}
-          onPlay={() => {
-            console.log('play');
-          }}
-          onBackToFeed={() => {
-            console.log('back to feed');
-          }}
         />
       </div>
     )

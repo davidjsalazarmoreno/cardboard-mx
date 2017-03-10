@@ -21,8 +21,8 @@ import './public-video-feed.component.scss';
 
 export interface IPublicVideoFeedComponentProps {
   videos: Array<IVideo>;
-  onPlay?: () => void;
-  onBackToFeed?: () => void;
+  onCommentSave?: ( index, comment ) => Promise<boolean>;
+  onRatingSave?: ( index, upOrDown ) => Promise<boolean>;
 };
 
 export interface IPublicVideoFeedComponentState {
@@ -44,6 +44,9 @@ export class PublicVideoFeedComponent extends React.Component<IPublicVideoFeedCo
   }
 
   renderVideoPlayer() {
+    // Props
+    const { onCommentSave, onRatingSave } = this.props;
+
     // State
     const { indexOfSelectedVideo } = this.state;
 
@@ -70,26 +73,14 @@ export class PublicVideoFeedComponent extends React.Component<IPublicVideoFeedCo
           <VideoRatingComponent 
             count={{ up: video.rating.up, down: video.rating.down }}
             onThumbClick={( upOrDown ) => {
-
-              const promise = new Promise((resolve, reject) => {
-                setTimeout(() => {
-                  resolve(true);
-                }, 1500);
-              });
-
-              return promise;
+              return onRatingSave( indexOfSelectedVideo, upOrDown );
             }}
           />
+
           <VideoCommentsComponent 
             comments={video.comments}
             onSave={( comment ) => {
-              const promise = new Promise((resolve, reject) => {
-                setTimeout(() => {
-                  resolve(true);
-                }, 3000);
-              });
-
-              return promise;
+              return onCommentSave( indexOfSelectedVideo, comment );
             }}
           />
         </VideoPlayerComponent>
@@ -99,7 +90,7 @@ export class PublicVideoFeedComponent extends React.Component<IPublicVideoFeedCo
 
   render() {
     // Props
-    const { videos, onPlay } = this.props;
+    const { videos } = this.props;
 
     // State
     const { isPlaying } = this.state;
@@ -134,7 +125,6 @@ export class PublicVideoFeedComponent extends React.Component<IPublicVideoFeedCo
                   });
 
                   this.setState(newState);
-                  onPlay();
                 }}
               >
                 <VideoThumbnailComponent
@@ -144,7 +134,15 @@ export class PublicVideoFeedComponent extends React.Component<IPublicVideoFeedCo
                   url={extractYoutubeId( url )}
                   width="25%"
                   height="25%"
-                  onClick={() => {}}
+                  onClick={() => {
+                    const newState = ({
+                      ...this.state,
+                      isPlaying: true,
+                      indexOfSelectedVideo: index
+                    });
+
+                    this.setState(newState);
+                  }}
                 />
                 <b>
                   {title}
@@ -159,7 +157,9 @@ export class PublicVideoFeedComponent extends React.Component<IPublicVideoFeedCo
                 <b>
                   {rating.up}
                 </b>
+
                 &nbsp;
+
                 <i className="fa fa-thumbs-o-down" aria-hidden="true"></i>
                 <b>
                   {rating.down}
