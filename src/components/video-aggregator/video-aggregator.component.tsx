@@ -65,7 +65,7 @@ export class VideoAggregatorComponent extends React.Component<IVideoAggregatorCo
 
     return (
       <div className="VideoAggregatorComponent">
-        <form onSubmit={(event) => {
+        <form className="form" onSubmit={(event) => {
           event.preventDefault();
 
           toggleLoadingState('Agregando enlace, por favor espera.');
@@ -87,37 +87,46 @@ export class VideoAggregatorComponent extends React.Component<IVideoAggregatorCo
 
           })
         }}>
-          <label htmlFor="urlAggregator">
+          <div className="form-group">
+            <label htmlFor="urlAggregator">
             Agrega tu enlace youtube
-          </label>
-          <input type="text" id="url" onChange={handleInputChange} maxLength={150} required />
+            </label>
+            <input className="form-control" type="text" id="url" onChange={handleInputChange} maxLength={150} required />
+          </div>
 
-          <label htmlFor="title">
-            Titulo
-          </label>
-          <input type="text" id="title" onChange={handleInputChange} disabled={!isAValidUrl} maxLength={150} required />
+          <div className="form-group">
+            <label htmlFor="title">
+              Titulo
+            </label>
+            <input className="form-control" type="text" id="title" onChange={handleInputChange} disabled={!isAValidUrl} maxLength={150} required />
+          </div>
 
-          <label htmlFor="description">
-            Descripción
-          </label>
-          <input type="text" id="description" onChange={handleInputChange} disabled={!isAValidUrl} maxLength={150} required />
+          <div className="form-group">
+            <label htmlFor="description">
+              Descripción
+            </label>
+            <input className="form-control" type="text" id="description" onChange={handleInputChange} disabled={!isAValidUrl} maxLength={150} required />
+          </div>
 
-          <label htmlFor="category">
-            Categoría
-          </label>
-          <input type="text" id="category" onChange={handleInputChange} disabled={!isAValidUrl} maxLength={150} required />
-          
+          <div className="form-group">
+            <label htmlFor="category">
+              Categoría
+            </label>
+            <input className="form-control" type="text" id="category" onChange={handleInputChange} disabled={!isAValidUrl} maxLength={150} required />
+          </div>
+
+
           {
-            !isAValidUrl && <p>
+            !isAValidUrl && <p className="help-block">
               Por favor ingresa un enlace de youtube
             </p>
           }
 
-          <p className="error">
+          <p className="help-block">
             {loadingText}
           </p>
 
-          <button type="submit" disabled={!isAValidUrl}>
+          <button className="btn btn-primary btn-block" type="submit" disabled={!isAValidUrl}>
             Agregar enlace
           </button>
         </form>

@@ -19,6 +19,9 @@ import {addVideos} from '../reducers/index';
 // Components
 import {PublicVideoFeedComponent} from '../components/public-video-feed/public-video-feed.component';
 
+// Styles
+import './public.container.scss';
+
 class PublicContainer extends React.Component<any, any> {
   constructor(props) {
     super(props);

@@ -23,6 +23,28 @@ const devEntries = [
 
 const entries = ENV !== JSON.stringify( 'production' ) ? devEntries.concat(baseEntries) :  baseEntries;
 
+
+const basePlugins = [
+  new webpack.DefinePlugin({
+    'process.env': {
+      'NODE_ENV': ENV
+    }
+  }),
+  new CopyWebpackPlugin([
+    { 
+      from: path.resolve( __dirname, 'src/views/index.html' ),
+      to: path.resolve( __dirname, 'docs/index.html' ) 
+    },
+    { 
+      from: path.resolve( __dirname, 'humans.txt' ),
+      to: path.resolve( __dirname, 'docs/humans.txt' ) 
+    },
+  ]),
+  new ExtractTextPlugin( 'styles.css' ),
+];
+const devPlugins = [];
+const prodPlugins = [ new webpack.optimize.UglifyJsPlugin({minimize: true}) ];
+
 module.exports = {
   target: 'web',
   entry: entries,
@@ -72,29 +94,7 @@ module.exports = {
     ]
   },
 
-  plugins: [
-    new webpack.DefinePlugin({
-      'process.env': {
-        'NODE_ENV': ENV
-      }
-    }),
-    new CopyWebpackPlugin([
-      // { 
-      //   from: path.resolve( __dirname, 'src/assets' ),
-      //   to: path.resolve( __dirname, 'docs/assets' ) 
-      // },
-      { 
-        from: path.resolve( __dirname, 'src/views/index.html' ),
-        to: path.resolve( __dirname, 'docs/index.html' ) 
-      },
-      { 
-        from: path.resolve( __dirname, 'humans.txt' ),
-        to: path.resolve( __dirname, 'docs/humans.txt' ) 
-      },
-    ]),
-    new ExtractTextPlugin( 'styles.css' ),
-    ENV !== JSON.stringify("production") ? [] : new webpack.optimize.UglifyJsPlugin({minimize: true})
-  ],
+  plugins: ENV !== JSON.stringify("production") ? basePlugins.concat(devPlugins) : basePlugins.concat(prodPlugins),
 
   // When importing a module whose path matches one of the following, just
   // assume a corresponding global variable exists and use that instead.

@@ -4,6 +4,9 @@ import * as React from 'react';
 // HOC
 import {LoadingStateHOC, ILoadingStateHOCOwnProps} from '../hoc/loading-state.hoc';
 
+// Styles
+import './session.component.scss';
+
 // Props
 interface ISessionComponentProps {
   username: string;
@@ -49,12 +52,15 @@ export class SessionComponent extends React.Component<ISessionComponentProps & I
 
   renderUserCard() {
     return (
-      <div>
-        Usuario: {this.props.username}
-        <hr/>
-        <button type="button" onClick={() => {
+      <div className="SessionComponent navbar-form navbar-right">
+        <span className="username">
+          Usuario: {this.props.username}
+        </span>
+        <button className="btn btn-danger" type="button" onClick={() => {
           this.props.onLogout();
-        }}>Cerrar sesión</button>
+        }}>
+          Cerrar sesión
+        </button>
       </div>
     )
   }
@@ -77,48 +83,38 @@ export class SessionComponent extends React.Component<ISessionComponentProps & I
     }
 
     return (
-      <div className="SessionComponent">
+      <form className="SessionComponent navbar-form navbar-right" onSubmit={event => {
+        event.preventDefault();
 
-        <form onSubmit={event => {
-          event.preventDefault();
+        toggleLoadingState('Iniciando sesión');
 
-          toggleLoadingState('Iniciando sesión');
+        onSave( username, password ).then(success => {
+          console.log(success);
+          toggleLoadingState('');
 
-          onSave( username, password ).then(success => {
-            console.log(success);
-            toggleLoadingState('');
+        }).catch(error => {
+          console.log(error);
+          toggleLoadingState('Hubo un error al iniciar sesión, intenta de nuevo');
+        });
+      }}>
 
-          }).catch(error => {
-            console.log(error);
-            toggleLoadingState('Hubo un error al iniciar sesión, intenta de nuevo');
-          });
-        }}>
-          <h3>
-            Iniciar Sesión
-          </h3>
+        <div className="form-group">
+          <input className="form-control" id="username" type="email" placeholder="Usuario" onChange={handleInputChange} required />
+        </div>
 
-          <label htmlFor="user">
-            Usuario
-          </label>
-          <input id="username" type="email" onChange={handleInputChange} required />
+        <div className="form-group">
+          <input className="form-control" id="password" type="password" placeholder="Contraseña" onChange={handleInputChange} required />
+        </div>       
 
 
-          <label htmlFor="password">
-            Contraseña
-          </label>
-          <input id="password" type="password" onChange={handleInputChange} required />
-
-          <p>
-            {loadingText}
-          </p>
-
-          <button type="submit">
-            Aceptar
-          </button>
-        </form>
-
-      </div>
-    )
+        <button type="submit" className="btn btn-success">
+          Iniciar Sesión
+        </button>
+        <span>
+          {loadingText}
+        </span>
+      </form>
+    );
   }
 };
 

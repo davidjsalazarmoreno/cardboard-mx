@@ -60,21 +60,21 @@ export class VideoCommentsComponent extends React.Component<IVideoCommentsCompon
 
         <h3>Comentarios</h3>
 
-        <ul>
+        <ul className="list-group">
           {
             comments ? comments.map(({name, comment}) => {
               return (
-                <li key={name}>
+                <li className="list-group-item" key={name}>
                   <b>{name}</b>: {comment}
                 </li>
               );
-            }) : <li>Sin comentarios, ¡sé el primero!</li>
+            }) : <li className="list-group-item">Sin comentarios, ¡sé el primero!</li>
           }
         </ul>
 
         <hr/>
 
-        <form onSubmit={event => {
+        <form className="form" onSubmit={event => {
           event.preventDefault();
 
           this.props.toggleLoadingState('Agregando comentario, espera.');
@@ -96,19 +96,19 @@ export class VideoCommentsComponent extends React.Component<IVideoCommentsCompon
           <label htmlFor="name">
             Nombre
           </label>
-          <input id="name" type="text" onChange={handleNewCommentChange} required />
+          <input className="form-control" id="name" type="text" onChange={handleNewCommentChange} required />
 
 
           <label htmlFor="comment">
             Comentario
           </label>
-          <textarea id="comment" onChange={handleNewCommentChange} required></textarea>
+          <textarea className="form-control" id="comment" onChange={handleNewCommentChange} required></textarea>
 
           <p className="error-message">
             {loadingText}
           </p>
 
-          <button type="submit">
+          <button className="btn btn-primary" type="submit">
             Agregar
           </button>
         </form>

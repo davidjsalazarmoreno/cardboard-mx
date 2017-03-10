@@ -55,7 +55,7 @@ export class PublicVideoFeedComponent extends React.Component<IPublicVideoFeedCo
  
     return (
       <div>
-        <button type="button" onClick={() => {
+        <button className="btn btn-warning" type="button" onClick={() => {
           this.setState({
             ...this.state,
             indexOfSelectedVideo: -1,
@@ -132,8 +132,7 @@ export class PublicVideoFeedComponent extends React.Component<IPublicVideoFeedCo
                   type={type}
                   alt={description}
                   url={extractYoutubeId( url )}
-                  width="25%"
-                  height="25%"
+                  width="300"
                   onClick={() => {
                     const newState = ({
                       ...this.state,
@@ -149,18 +148,18 @@ export class PublicVideoFeedComponent extends React.Component<IPublicVideoFeedCo
                 </b>
 
                 <br/>
-                <b>Comments</b>: {comments ? comments.length : 0}
+                <b>Comentarios</b>: {comments ? comments.length : 0}
                 <br/>
 
                 <b>Rating</b>:
-                <i className="fa fa-thumbs-o-up" aria-hidden="true"></i>
+                <i className="glyphicon glyphicon-thumbs-up" aria-hidden="true"></i>
                 <b>
                   {rating.up}
                 </b>
 
                 &nbsp;
 
-                <i className="fa fa-thumbs-o-down" aria-hidden="true"></i>
+                <i className="glyphicon glyphicon-thumbs-down" aria-hidden="true"></i>
                 <b>
                   {rating.down}
                 </b>

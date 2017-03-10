@@ -4,6 +4,9 @@ import * as React from 'react';
 // HOC
 import {LoadingStateHOC, ILoadingStateHOCOwnProps} from '../hoc/loading-state.hoc';
 
+// Styles
+import'./video-player.component.scss';
+
 // Props
 interface IVideoPlayerComponentProps {
   url: string;
@@ -36,7 +39,7 @@ export class VideoPlayerComponent extends React.Component<IVideoPlayerComponentP
         <iframe 
           src={`${url}`} 
           width="640" 
-          height="480" 
+          height="480"
           frameBorder="0" 
           allowFullScreen
           onLoad={() => {

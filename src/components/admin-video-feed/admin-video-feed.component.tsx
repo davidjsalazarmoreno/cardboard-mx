@@ -42,14 +42,17 @@ export class AdminVideoFeedComponent extends React.Component<IAdminVideoFeedComp
         />
 
         <hr/>
-        <ol>
+        <ol className="list-group">
           {
             videos.map((video, index) => {
               return (
-                <li key={index}>
-                  {video.title}
+                <li className="list-group-item" key={index}>
+                  <p>
+                    {video.title}
+                  </p>
                   
                   <button 
+                    className="btn btn-xs btn-primary"
                     type="button" 
                     onClick={() => {
                       event.preventDefault();
@@ -71,6 +74,7 @@ export class AdminVideoFeedComponent extends React.Component<IAdminVideoFeedComp
                   </button>
                   
                   <button 
+                    className="btn btn-xs btn-primary"
                     type="button" 
                     onClick={(event) => {
                       event.preventDefault();
@@ -91,6 +95,7 @@ export class AdminVideoFeedComponent extends React.Component<IAdminVideoFeedComp
                   </button>
 
                   <button 
+                    className="btn btn-danger btn-xs"
                     type="button" 
                     onClick={(event) => {
                       event.preventDefault();

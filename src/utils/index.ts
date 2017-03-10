@@ -64,4 +64,9 @@ export const arrayUtils = {
 
     }).filter(element => element != null);
   }
-}
+};
+
+
+export function env(): string {
+  return process.env.NODE_ENV;
+};

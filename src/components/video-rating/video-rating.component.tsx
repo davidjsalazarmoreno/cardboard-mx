@@ -59,16 +59,16 @@ export class VideoRatingComponent extends React.Component<IVideoRatingComponentP
       <div className="VideoRatingComponent">
         <form>
 
-          <button type="button" data-thumb="up" onClick={handleThumbClick}>
-            <i className="fa fa-thumbs-o-up" aria-hidden="true"></i>
+          <button className="btn btn-xs btn-primary" type="button" data-thumb="up" onClick={handleThumbClick}>
+            <i className="glyphicon glyphicon-thumbs-up" aria-hidden="true"></i>
             <b>
               {count.up}
             </b>
           </button>
           {/* /Up vote */}
 
-          <button type="button" data-thumb="down" onClick={handleThumbClick}>
-            <i className="fa fa-thumbs-o-down" aria-hidden="true"></i>
+          <button className="btn btn-xs btn-primary" type="button" data-thumb="down" onClick={handleThumbClick}>
+            <i className="glyphicon glyphicon-thumbs-down" aria-hidden="true"></i>
             <b>
               {count.down}
             </b>
