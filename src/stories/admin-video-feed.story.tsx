@@ -124,6 +124,14 @@ class Wrapper extends React.Component<any,any> {
                   return element;
                 });
               },
+              'delete': ( index, currentVideos ) => {
+                return currentVideos.map((element, idx) => {
+                  if( index === idx ) { return; }
+
+                  return element;
+
+                }).filter(element => element != null);
+              }
             };
 
             return new Promise((resolve, reject) => {
@@ -220,6 +228,14 @@ class WrapperFirebase extends React.Component<any,any> {
 
                   return element;
                 });
+              },
+              'delete': ( index, currentVideos ) => {
+                return currentVideos.map((element, idx) => {
+                  if( index === idx ) { return; }
+
+                  return element;
+
+                }).filter(element => element != null);
               },
             };
 

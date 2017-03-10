@@ -13,7 +13,7 @@ import {VideoAggregatorComponent} from '../video-aggregator/video-aggregator.com
 // Interfaces
 import {IVideo} from '../../interfaces';
 
-type TDirection = 'up' | 'down';
+type TDirection = 'up' | 'down' | 'delete';
 
 // Props
 interface IAdminVideoFeedComponentProps extends IPublicVideoFeedComponentProps {
@@ -89,6 +89,25 @@ export class AdminVideoFeedComponent extends React.Component<IAdminVideoFeedComp
                   >
                     Bajar
                     <i className="fa fa-arrow-down"></i>
+                  </button>
+
+                  <button 
+                    type="button" 
+                    onClick={(event) => {
+                      event.preventDefault();
+
+                      toggleLoadingState('Borrando video, espera');
+                      onChangeVideoPosition( index, 'delete' ).then((success) => {
+                        toggleLoadingState('');
+            
+                      }).catch(error => {
+                        console.log(error);
+                        toggleLoadingState('Hubo un error mientras se borraba el video.');
+                      });
+                    }}
+                  >
+                    Borrar
+                    <i className="fa fa-trash"></i>
                   </button>
                   
  
