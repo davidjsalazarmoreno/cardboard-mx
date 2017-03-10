@@ -14,7 +14,7 @@ import * as firebase from 'firebase';
 import {IDomainState} from '../reducers/index';
 
 // Actions creators
-import {login, logout} from '../reducers/index';
+import {login, logout, toggleAdminPanel} from '../reducers/index';
 
 // Containers
 import PublicContainer from '../containers/public.container';
@@ -23,6 +23,8 @@ import AdminContainer from '../containers/admin.container';
 // Components
 import {SessionComponent} from '../components/session/session.component';
 
+// Selectors
+import {isAuthenticated, isAdminPanelVisible} from '../reducers/index';
 
 class MainContainer extends React.Component<any, any> {
   constructor(props) {
@@ -30,6 +32,12 @@ class MainContainer extends React.Component<any, any> {
   }
 
   render() {
+    // State to props
+    const { isAuthenticated, isAdminPanelVisible } = this.props;
+
+    // Dispatch to Props
+    const { onLogin, onLogout, onToggleAdminPanel } = this.props;
+
     return (
       <div className="MainContainer container">
         <SessionComponent 
@@ -39,14 +47,13 @@ class MainContainer extends React.Component<any, any> {
 
             return new Promise((resolve, reject) => {
               authPromise.then((...args) => {
-                console.log(args);
                 console.log(username);
-                this.props.onLogin( username );
+                onLogin( username );
 
                 return resolve(true);
               }).catch(error => {
                 console.log(error);
-                this.props.onLogout();
+                onLogout();
 
                 return reject(false);
               })
@@ -60,12 +67,12 @@ class MainContainer extends React.Component<any, any> {
               authPromise.then((...args) => {
                 console.log(args);
 
-                this.props.onLogout();
+                onLogout();
 
                 return resolve(true);
               }).catch(error => {
                 console.log(error);
-                this.props.onLogout();
+                onLogout();
                 return reject(false);
               })
 
@@ -73,9 +80,20 @@ class MainContainer extends React.Component<any, any> {
           }}
         />
 
-        <PublicContainer />
+        {
+          isAuthenticated && <a href="#" onClick={(event) => {
+            event.preventDefault();
 
-        <AdminContainer />
+            onToggleAdminPanel();
+          }}>
+            { !isAdminPanelVisible && 'Panel de administración' }
+            { isAdminPanelVisible && 'Lista pública de videos' }
+          </a>
+        }
+        
+
+        { !isAdminPanelVisible && <PublicContainer /> }
+        { (isAuthenticated &&  isAdminPanelVisible) && <AdminContainer /> }
       </div>
     )
   }
@@ -84,12 +102,15 @@ class MainContainer extends React.Component<any, any> {
 const mapStateToProps = (state: IDomainState, ownProps) => {
   const { username } = state.App;
   return {
-    username
+    username,
+    isAdminPanelVisible: isAdminPanelVisible(state),
+    isAuthenticated: isAuthenticated( state )
   }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
+    onToggleAdminPanel: bindActionCreators( toggleAdminPanel, dispatch ),
     onLogin: bindActionCreators( login, dispatch ),
     onLogout: bindActionCreators( logout, dispatch ),
   }

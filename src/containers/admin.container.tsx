@@ -19,6 +19,9 @@ import {addVideos} from '../reducers/index';
 // Components
 import {AdminVideoFeedComponent} from '../components/admin-video-feed/admin-video-feed.component';
 
+// Utils
+import {arrayUtils} from '../utils/index';
+
 class PublicContainer extends React.Component<any, any> {
   constructor(props) {
     super(props);
@@ -39,13 +42,14 @@ class PublicContainer extends React.Component<any, any> {
   render() {
     return (
       <div className="PublicContainer">
+        <h2>Panel de administración</h2>
         <AdminVideoFeedComponent 
           videos={this.props.videos}
           onVideoSave={video => {
             const videosWithTheNew = [ ...this.props.videos, video ];
+            const remoteVideosRef = firebase.database().ref('cardboard/');
 
             return new Promise((resolve, reject) => {
-              const remoteVideosRef = firebase.database().ref('cardboard/');
 
               remoteVideosRef.set({
                 'videos': videosWithTheNew
@@ -60,6 +64,27 @@ class PublicContainer extends React.Component<any, any> {
               });
 
             });
+          }}
+          onChangeVideoPosition={(index, direction) => {
+            const length = this.props.videos.length - 1;
+            const remoteVideosRef = firebase.database().ref('cardboard/');
+
+            return new Promise((resolve, reject) => {
+              const rearrangedVideos = arrayUtils[ direction ]( index, this.props.videos );
+
+              remoteVideosRef.set({
+                'videos': rearrangedVideos
+              }).then((...args) => {
+                this.props.addVideos( rearrangedVideos );
+                resolve(true);
+
+              }).catch(error => {
+                console.log(error);
+                resolve(false);
+              });
+
+            });
+
           }}
         />
       </div>

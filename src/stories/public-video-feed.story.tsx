@@ -172,7 +172,7 @@ class WrapperFirebase extends React.Component<any,any> {
 
             return new Promise((resolve, reject) => {
               remoteVideosRef.set({
-                'videos': newState
+                'videos': newState.videos
               }).then((...args) => {
                 this.setState(newState);
                 resolve(true);
@@ -207,7 +207,7 @@ class WrapperFirebase extends React.Component<any,any> {
 
             return new Promise((resolve, reject) => {
               remoteVideosRef.set({
-                'videos': newState
+                'videos': newState.videos
               }).then((...args) => {
                 this.setState(newState);
                 resolve(true);

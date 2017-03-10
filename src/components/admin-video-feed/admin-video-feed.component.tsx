@@ -24,7 +24,6 @@ interface IAdminVideoFeedComponentProps extends IPublicVideoFeedComponentProps {
 // State
 interface IAdminVideoFeedComponentState {};
 
-
 @LoadingStateHOC()
 export class AdminVideoFeedComponent extends React.Component<IAdminVideoFeedComponentProps & ILoadingStateHOCOwnProps, IAdminVideoFeedComponentState> {
   constructor(props) {
@@ -43,7 +42,7 @@ export class AdminVideoFeedComponent extends React.Component<IAdminVideoFeedComp
         />
 
         <hr/>
-        <ul>
+        <ol>
           {
             videos.map((video, index) => {
               return (
@@ -108,14 +107,13 @@ export class AdminVideoFeedComponent extends React.Component<IAdminVideoFeedComp
                   >
                     Borrar
                     <i className="fa fa-trash"></i>
-                  </button>
-                  
+                  </button>      
  
                 </li>
               );
             })
           }
-        </ul>
+        </ol>
       </div>
     );
   }

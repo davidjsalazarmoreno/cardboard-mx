@@ -1,14 +1,31 @@
-var CopyWebpackPlugin = require('copy-webpack-plugin');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var webpack = require('webpack');
-var path = require('path');
+// Dotenv
+const dotenv = require('dotenv');
+
+// Path
+const path = require('path');
+
+dotenv.config();
+
+// Webpack
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const webpack = require('webpack');
+const ENV = JSON.stringify( process.env.ENV );
+
+const baseEntries = [
+  path.resolve( __dirname, 'src/Bootstrap.tsx' )
+]
+
+const devEntries = [
+  'webpack-dev-server/client?http://0.0.0.0:8000', // WebpackDevServer host and port
+  'webpack/hot/only-dev-server', // "only" prevents reload on syntax errors
+];
+
+const entries = ENV !== JSON.stringify( 'production' ) ? devEntries.concat(baseEntries) :  baseEntries;
 
 module.exports = {
-  entry: [
-  //  'webpack-dev-server/client?http://0.0.0.0:8000', // WebpackDevServer host and port
-  //  'webpack/hot/only-dev-server', // "only" prevents reload on syntax errors
-    path.resolve( __dirname, 'src/Bootstrap.tsx' )
-  ],
+  target: 'web',
+  entry: entries,
   node: {
     fs: "empty"
   },
@@ -19,7 +36,7 @@ module.exports = {
 
   // https://github.com/kevlened/copy-webpack-plugin/issues/44
   devServer: {
-    outputPath: path.resolve( __dirname, 'docs/' )
+    outputPath: path.resolve( __dirname, 'docs/' ),
   },
 
   // Enable sourcemaps for debugging webpack's output.
@@ -33,7 +50,9 @@ module.exports = {
   module: {
     loaders: [
       { 
-        test: /\.tsx?$/, loaders: [ 'react-hot', 'ts-loader?configFileName=tsconfig.json' ]
+        test: /\.tsx?$/,
+        exclude: /node_modules/,
+        loaders: ENV !== JSON.stringify( 'production' ) ? [ 'react-hot', 'ts-loader?configFileName=tsconfig.json' ] : [ 'ts-loader?configFileName=tsconfig.json' ] 
       },
       {
         test: /\.css?$/,
@@ -56,7 +75,7 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
-        'NODE_ENV': JSON.stringify('development')
+        'NODE_ENV': ENV
       }
     }),
     new CopyWebpackPlugin([
@@ -73,7 +92,8 @@ module.exports = {
         to: path.resolve( __dirname, 'docs/humans.txt' ) 
       },
     ]),
-    new ExtractTextPlugin( 'styles.css' )
+    new ExtractTextPlugin( 'styles.css' ),
+    ENV !== JSON.stringify("production") ? [] : new webpack.optimize.UglifyJsPlugin({minimize: true})
   ],
 
   // When importing a module whose path matches one of the following, just
@@ -85,5 +105,6 @@ module.exports = {
     'react-dom': 'ReactDOM',
     'redux': 'Redux',
     'react-redux': 'ReactRedux',
+    'firebase': 'firebase',
   }
 };

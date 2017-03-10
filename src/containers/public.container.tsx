@@ -37,10 +37,90 @@ class PublicContainer extends React.Component<any, any> {
   }
 
   render() {
+    // State to props
+    const { videos } = this.props;
+
     return (
       <div className="PublicContainer">
+        <h2>Videos</h2>
+
+        {videos.length === 0 && 'Cargando videos, espera'}
         <PublicVideoFeedComponent 
-          videos={this.props.videos}
+          videos={videos}
+          onRatingSave={( index, upOrDown ) => {
+            const remoteVideosRef = firebase.database().ref('cardboard/');
+            const newState = ({
+              ...this.state,
+              videos: this.props.videos.map((video, idx) => {
+                if ( index === idx ) {
+                  const videoWithNewRating = ({
+                    ...video,
+                    rating: {
+                      ...video.rating,
+                      [upOrDown]: ++video.rating[upOrDown]
+                    }
+                  });
+
+                  return videoWithNewRating;
+                }
+
+                return video;
+              })
+              
+            });
+
+            return new Promise((resolve, reject) => {
+              remoteVideosRef.set({
+                'videos': newState.videos
+              }).then((...args) => {
+                this.props.addVideos( newState.videos );
+                resolve(true);
+
+              }).catch(error => {
+                console.log(error);
+                resolve(false);
+
+              });
+            });
+
+
+          }}
+          onCommentSave={( index, comment ) => {
+            const remoteVideosRef = firebase.database().ref('cardboard/');
+            const newState = ({
+              ...this.state,
+              videos: this.props.videos.map((video, idx) => {
+                if ( index === idx ) {
+                  const videoWithNewComment = ({
+                    ...video,
+                    comments: [ comment, ...video.comments ]
+                  });
+
+                  return videoWithNewComment;
+                }
+
+                return video;
+              })
+            });
+
+            console.log(newState);
+
+            return new Promise((resolve, reject) => {
+              remoteVideosRef.set({
+                'videos': newState.videos
+              }).then((...args) => {
+                this.props.addVideos( newState.videos );
+                resolve(true);
+
+              }).catch(error => {
+                console.log(error);
+                resolve(false);
+
+              });
+            });
+
+
+          }}
         />
       </div>
     )

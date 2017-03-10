@@ -31,7 +31,7 @@ export function addVideos ( videos: Array<IVideo> ) {
   };
 };
 
-function toggleAdminPanel() {
+export function toggleAdminPanel() {
   return {
     type: TOGGLE_ADMIN_PANEL
   };
@@ -75,7 +75,7 @@ export function App ( state = AppInitialState, action ) {
     case TOGGLE_ADMIN_PANEL:
       return ({
         ...state,
-        videos: !state.toggleAdminPanel
+        toggleAdminPanel: !state.toggleAdminPanel
       });
 
     case ADD_VIDEOS:
@@ -97,8 +97,12 @@ export const reducers = combineReducers({
 export default reducers;
 
 // Redux Selectors
-export function authenticated( state: IDomainState ): boolean {
+export function isAuthenticated( state: IDomainState ): boolean {
   return state.App.username.length > 0;
+}
+
+export function isAdminPanelVisible( state: IDomainState ): boolean {
+  return !!state.App.toggleAdminPanel;
 }
 
 
