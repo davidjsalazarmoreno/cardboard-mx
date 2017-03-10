@@ -10,7 +10,6 @@ import {VideoRatingComponent} from '../components/video-rating/video-rating.comp
 // Utils
 import {extractYoutubeId} from '../utils/index';
 
-
 class Wrapper extends React.Component<any, any> {
   state = {
     up: 200,
@@ -24,28 +23,28 @@ class Wrapper extends React.Component<any, any> {
   render() {
     return (
       <div>
-      <VideoRatingComponent 
-        count={this.state}
-        onThumbClick={( upOrDown ) => {
-          console.log(upOrDown);
+        <VideoRatingComponent 
+          count={this.state}
+          onThumbClick={( upOrDown ) => {
+            console.log(upOrDown);
 
-          const promise: Promise<boolean> = new Promise((resolve, reject) => {
-            setTimeout(() => {
-              const newState = ({
-                ...this.state,
-                [upOrDown]: this.state[ upOrDown ]++
-              });
+            const promise: Promise<boolean> = new Promise((resolve, reject) => {
+              setTimeout(() => {
+                const newState = ({
+                  ...this.state,
+                  [upOrDown]: ++this.state[ upOrDown ]
+                });
 
-              this.setState(newState);
+                this.setState(newState);
 
-              resolve(true);
-            }, 3000);
-          });
+                resolve(true);
+              }, 3000);
+            });
 
-          return promise;
-        }}
-      />
-    </div>
+            return promise;
+          }}
+        />
+      </div>
     );
   }
 }

@@ -10,7 +10,7 @@ interface IVideoCommentsComponentProps {
     name: string;
     comment: string;
   }>;
-  onSave: ( comment ) => Promise<boolean>; 
+  onSave: ( comment: { name: string, comment: string } ) => Promise<boolean>; 
 };
 
 // State
