@@ -53,7 +53,7 @@ class MainContainer extends React.Component<any, any> {
                 <span className="icon-bar"></span>
                 <span className="icon-bar"></span>
               </button>
-              <a className="navbar-brand" href="/">CardBoardMX DevTesting</a>
+              <a className="navbar-brand" href="/cardboard-mx/">CardBoardMX DevTesting</a>
             </div>
 
             <div id="navbar" className="collapse navbar-collapse">
