@@ -22,18 +22,21 @@ import {PublicVideoFeedComponent} from '../components/public-video-feed/public-v
 // Styles
 import './public.container.scss';
 
+// Utils
+import {env} from '../utils/index';
+
 class PublicContainer extends React.Component<any, any> {
   constructor(props) {
     super(props);
   }
 
   componentDidMount () {
-    const remoteVideosRef = firebase.database().ref('cardboard/');
+    const remoteVideosRef = firebase.database().ref(`cardboard-${env()}/`);
 
     remoteVideosRef.once('value').then((snapshot) => {
-      console.log(snapshot.val());
+      console.log(snapshot.val()[`videos-${env()}`]);
 
-      const remoteVideos = snapshot.val().videos;
+      const remoteVideos = snapshot.val()[`videos-${env()}`];
 
       this.props.addVideos( remoteVideos );
     });
@@ -51,7 +54,7 @@ class PublicContainer extends React.Component<any, any> {
         <PublicVideoFeedComponent 
           videos={videos}
           onRatingSave={( index, upOrDown ) => {
-            const remoteVideosRef = firebase.database().ref('cardboard/');
+            const remoteVideosRef = firebase.database().ref(`cardboard-${env()}/`);
             const newState = ({
               ...this.state,
               videos: this.props.videos.map((video, idx) => {
@@ -74,7 +77,7 @@ class PublicContainer extends React.Component<any, any> {
 
             return new Promise((resolve, reject) => {
               remoteVideosRef.set({
-                'videos': newState.videos
+                [`videos-${env()}`]: newState.videos
               }).then((...args) => {
                 this.props.addVideos( newState.videos );
                 resolve(true);
@@ -89,7 +92,7 @@ class PublicContainer extends React.Component<any, any> {
 
           }}
           onCommentSave={( index, comment ) => {
-            const remoteVideosRef = firebase.database().ref('cardboard/');
+            const remoteVideosRef = firebase.database().ref(`cardboard-${env()}/`);
             const newState = ({
               ...this.state,
               videos: this.props.videos.map((video, idx) => {
@@ -110,7 +113,7 @@ class PublicContainer extends React.Component<any, any> {
 
             return new Promise((resolve, reject) => {
               remoteVideosRef.set({
-                'videos': newState.videos
+                [`videos-${env()}`]: newState.videos
               }).then((...args) => {
                 this.props.addVideos( newState.videos );
                 resolve(true);

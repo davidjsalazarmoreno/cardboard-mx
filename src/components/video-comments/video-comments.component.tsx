@@ -62,13 +62,15 @@ export class VideoCommentsComponent extends React.Component<IVideoCommentsCompon
 
         <ul className="list-group">
           {
-            comments ? comments.map(({name, comment}) => {
+            comments.length === 1 && comments[0].name.length === 0 ? 'Sin comentarios, ¡se el primero!' : comments.map(({name, comment}) => {
+              if( name.length === 0 ) { return null; }
+
               return (
                 <li className="list-group-item" key={name}>
                   <b>{name}</b>: {comment}
                 </li>
               );
-            }) : <li className="list-group-item">Sin comentarios, ¡sé el primero!</li>
+            })
           }
         </ul>
 
@@ -96,13 +98,13 @@ export class VideoCommentsComponent extends React.Component<IVideoCommentsCompon
           <label htmlFor="name">
             Nombre
           </label>
-          <input className="form-control" id="name" type="text" onChange={handleNewCommentChange} required />
+          <input className="form-control" id="name" type="text" onChange={handleNewCommentChange} maxLength={100} required />
 
 
           <label htmlFor="comment">
             Comentario
           </label>
-          <textarea className="form-control" id="comment" onChange={handleNewCommentChange} required></textarea>
+          <textarea className="form-control" id="comment" onChange={handleNewCommentChange} maxLength={200} required></textarea>
 
           <p className="error-message">
             {loadingText}

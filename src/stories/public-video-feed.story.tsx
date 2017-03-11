@@ -13,6 +13,9 @@ import {IVideo} from '../interfaces';
 // Components
 import {PublicVideoFeedComponent} from '../components/public-video-feed/public-video-feed.component';
 
+// Utils
+import {env} from '../utils/index';
+
 const videos: Array<IVideo> = [
   { 
     title: 'Preguntas de las que Nadie tiene las Respuestas (Versión completa)', 
@@ -42,11 +45,11 @@ const videos: Array<IVideo> = [
   },
 ];
 
-const remoteVideosRef = firebase.database().ref('cardboard/');
+const remoteVideosRef = firebase.database().ref(`cardboard-${env()}/`);
 
-// remoteVideosRef.set({
-//   'videos': videos
-// });
+remoteVideosRef.set({
+  [`videos-${env()}`]: videos
+});
 
 class Wrapper extends React.Component<any,any> {
   state = {
@@ -136,9 +139,9 @@ class WrapperFirebase extends React.Component<any,any> {
 
   componentDidMount () {
     remoteVideosRef.once('value').then((snapshot) => {
-      console.log(snapshot.val());
+      console.log(snapshot.val()[`videos-${env()}`]);
 
-      const remoteVideos = snapshot.val().videos;
+      const remoteVideos = snapshot.val()[`videos-${env()}`];
 
       this.setState({ ...this.state, videos: remoteVideos })
     });
@@ -172,7 +175,7 @@ class WrapperFirebase extends React.Component<any,any> {
 
             return new Promise((resolve, reject) => {
               remoteVideosRef.set({
-                'videos': newState.videos
+                [`videos-${env()}`]: newState.videos
               }).then((...args) => {
                 this.setState(newState);
                 resolve(true);
@@ -207,7 +210,7 @@ class WrapperFirebase extends React.Component<any,any> {
 
             return new Promise((resolve, reject) => {
               remoteVideosRef.set({
-                'videos': newState.videos
+                [`videos-${env()}`]: newState.videos
               }).then((...args) => {
                 this.setState(newState);
                 resolve(true);

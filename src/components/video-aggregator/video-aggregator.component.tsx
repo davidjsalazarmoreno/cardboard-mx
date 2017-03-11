@@ -75,6 +75,7 @@ export class VideoAggregatorComponent extends React.Component<IVideoAggregatorCo
             url,
             category,
             description,
+            comments: [{ name: '', comment: '' }],
             type: 'youtube',
             rating: { up: 0, down: 0 }
           }).then(success => {

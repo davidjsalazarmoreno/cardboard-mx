@@ -14,7 +14,7 @@ import {IVideo} from '../interfaces';
 import {AdminVideoFeedComponent} from '../components/admin-video-feed/admin-video-feed.component';
 
 // Utils
-import {arrayUtils} from '../utils/index';
+import {arrayUtils, env} from '../utils/index';
 
 const videos: Array<IVideo> = [
   { 
@@ -71,7 +71,7 @@ const videos: Array<IVideo> = [
   },
 ];
 
-const remoteVideosRef = firebase.database().ref('cardboard/');
+const remoteVideosRef = firebase.database().ref(`cardboard-${env()}/`);
 
 class Wrapper extends React.Component<any,any> {
   state = {
@@ -138,7 +138,7 @@ class WrapperFirebase extends React.Component<any,any> {
 
   componentDidMount () {
     remoteVideosRef.once('value').then((snapshot) => {
-      const remoteVideos = snapshot.val().videos;
+      const remoteVideos = snapshot.val()[`videos-${env()}`];
 
       this.setState({ ...this.state, videos: remoteVideos })
     });
@@ -155,7 +155,7 @@ class WrapperFirebase extends React.Component<any,any> {
               console.log(videos);
 
               remoteVideosRef.set({
-                'videos': videosWithTheNew
+                [`videos-${env()}`]: videosWithTheNew
               }).then((...args) => {
                 console.log(args);
                 this.setState({
@@ -178,7 +178,7 @@ class WrapperFirebase extends React.Component<any,any> {
               const rearrangedVideos = arrayUtils[ direction ]( index, this.state.videos );
 
               remoteVideosRef.set({
-                'videos': rearrangedVideos
+                [`videos-${env()}`]: rearrangedVideos
               }).then((...args) => {
                 console.log(args);
                 this.setState({

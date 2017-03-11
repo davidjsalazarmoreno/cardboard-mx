@@ -100,6 +100,8 @@ export class AdminVideoFeedComponent extends React.Component<IAdminVideoFeedComp
                     onClick={(event) => {
                       event.preventDefault();
 
+                      if ( videos.length === 1 ) { return; }
+
                       toggleLoadingState('Borrando video, espera');
                       onChangeVideoPosition( index, 'delete' ).then((success) => {
                         toggleLoadingState('');
@@ -109,6 +111,7 @@ export class AdminVideoFeedComponent extends React.Component<IAdminVideoFeedComp
                         toggleLoadingState('Hubo un error mientras se borraba el video.');
                       });
                     }}
+                    disabled={videos.length === 1}
                   >
                     Borrar
                     <i className="fa fa-trash"></i>

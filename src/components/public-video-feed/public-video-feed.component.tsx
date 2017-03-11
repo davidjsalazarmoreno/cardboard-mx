@@ -69,7 +69,7 @@ export class PublicVideoFeedComponent extends React.Component<IPublicVideoFeedCo
         
         <VideoPlayerComponent
           url={url}
-        >
+        > 
           <VideoRatingComponent 
             count={{ up: video.rating.up, down: video.rating.down }}
             onThumbClick={( upOrDown ) => {
@@ -77,6 +77,17 @@ export class PublicVideoFeedComponent extends React.Component<IPublicVideoFeedCo
             }}
           />
 
+          <hr/>
+
+          <p>
+            <b>Descripción</b>: {video.description}
+          </p>
+          <p>
+            <b>Categoría</b>: {video.category}
+          </p>
+
+          <hr/>
+          
           <VideoCommentsComponent 
             comments={video.comments}
             onSave={( comment ) => {
@@ -148,7 +159,7 @@ export class PublicVideoFeedComponent extends React.Component<IPublicVideoFeedCo
                 </b>
 
                 <br/>
-                <b>Comentarios</b>: {comments ? comments.length : 0}
+                <b>Comentarios</b>: {comments ? comments.length - 1 : 0}
                 <br/>
 
                 <b>Rating</b>:
